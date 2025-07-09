@@ -6,23 +6,10 @@
     <title>Sign In - Zam Prep</title>
     <link rel="stylesheet" href="/style.css">
     <style>
-        .auth-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 80vh;
-            padding: 40px 20px;
-        }
+        .auth-container { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 40px 20px; }
     </style>
-    
-    <script async defer
-        src="https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
-        data-clerk-publishable-key="pk_test_bW9yYWwtYm9hLTM4LmsuY2xlcmsuYWNjb3VudHMuZGV2JA"
-    ></script>
-
 </head>
 <body>
-
     <header>
         <nav>
             <a href="/en/"><img src="/logo.png" alt="Zam Prep Logo" class="logo"></a>
@@ -37,19 +24,19 @@
         <p>&copy; 2025 Zam Prep. All rights reserved.</p>
     </footer>
 
+    <script async defer
+        src="https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+        data-clerk-publishable-key="pk_test_bW9yYWwtYm9hLTM4LmsuY2xlcmsuYWNjb3VudHMuZGV2JA"
+        onload="startClerk()"
+    ></script>
     <script>
-        window.addEventListener('load', function() {
+        function startClerk() {
             const clerkComponent = document.getElementById('clerk-component');
             const Clerk = window.Clerk;
-            
-            if (clerkComponent && Clerk) {
-                try {
-                    Clerk.mountSignIn(clerkComponent);
-                } catch (error) {
-                    console.error(error);
-                }
-            }
-        });
+            Clerk.load().then(() => {
+                Clerk.mountSignIn(clerkComponent);
+            });
+        }
     </script>
 </body>
 </html>
