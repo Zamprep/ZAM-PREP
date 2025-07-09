@@ -1,10 +1,29 @@
-/* Logic for the language dropdown menu */
 document.addEventListener('DOMContentLoaded', function() {
+    
+    // --- Logic for Mobile Hamburger Menu ---
+    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+    const primaryNav = document.querySelector('.nav-menu');
+
+    if (mobileNavToggle) {
+        mobileNavToggle.addEventListener('click', () => {
+            const isVisible = primaryNav.getAttribute('data-visible') === 'true';
+            if (isVisible) {
+                primaryNav.setAttribute('data-visible', 'false');
+                mobileNavToggle.setAttribute('aria-expanded', 'false');
+            } else {
+                primaryNav.setAttribute('data-visible', 'true');
+                mobileNavToggle.setAttribute('aria-expanded', 'true');
+            }
+        });
+    }
+
+    // --- Logic for Language Dropdown ---
     const langButton = document.querySelector('.language-button');
     const dropdownContent = document.querySelector('.dropdown-content');
 
     if (langButton) {
-        langButton.addEventListener('click', function() {
+        langButton.addEventListener('click', function(event) {
+            event.stopPropagation(); // Prevents window.onclick from closing it immediately
             dropdownContent.classList.toggle('show');
         });
     }
