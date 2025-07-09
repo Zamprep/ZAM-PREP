@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar - Zam Prep</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            padding: 40px 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <a href="/pt-br/"><img src="/logo.png" alt="Logo Zam Prep" class="logo"></a>
+        </nav>
+    </header>
+
+    <main class="auth-container">
+        <div id="clerk-component"></div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Zam Prep. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        const publishableKey = "pk_test_bW9yYWwtYm9hLTM4LmsuY2xlcmsuYWNjb3VudHMuZGV2JA";
+        const clerkComponent = document.getElementById('clerk-component');
+
+        const startClerk = async () => {
+            const Clerk = window.Clerk;
+            try {
+                await Clerk.load();
+                // Mount the sign-in component with Portuguese localization
+                Clerk.mountSignIn(clerkComponent, {
+                    localization: {
+                        socialButtonsBlockButton: "Continuar com {{provider|titleize}}",
+                        dividerText: "ou",
+                        formButtonPrimary: "Continuar",
+                        signIn: {
+                            start: {
+                                title: "Acesse sua conta",
+                                subtitle: "Bem-vindo(a) de volta! Por favor, entre para continuar",
+                                actionLink: "Não tem uma conta? Inscreva-se"
+                            }
+                        }
+                    }
+                });
+            } catch (err) {
+                console.error("Clerk Error:", err);
+            }
+        };
+
+        const script = document.createElement("script");
+        script.setAttribute("data-clerk-publishable-key", publishableKey);
+        script.async = true;
+        script.src = `https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js`;
+        script.addEventListener("load", startClerk);
+        document.body.appendChild(script);
+    </script>
+</body>
+</html>
