@@ -32,25 +32,31 @@
     </footer>
 
     <script>
-        const publishableKey = "pk_test_bW9yYWwtYm9hLTM4LmsuY2xlcmsuYWNjb3VudHMuZGV2JA";
-        const clerkComponent = document.getElementById('clerk-component');
+        window.addEventListener('load', function () {
+            const publishableKey = "pk_test_bW9yYWwtYm9hLTM4LmsuY2xlcmsuYWNjb3VudHMuZGV2JA";
+            const clerkComponent = document.getElementById('clerk-component');
 
-        const startClerk = async () => {
-            const Clerk = window.Clerk;
-            try {
-                await Clerk.load();
-                Clerk.mountSignIn(clerkComponent);
-            } catch (err) {
-                console.error("Clerk Error:", err);
-            }
-        };
+            const startClerk = async () => {
+                const Clerk = window.Clerk;
+                if (!Clerk || !clerkComponent) {
+                    return;
+                }
+                
+                try {
+                    await Clerk.load();
+                    Clerk.mountSignIn(clerkComponent);
+                } catch (err) {
+                    console.error("Clerk Error:", err);
+                }
+            };
 
-        const script = document.createElement("script");
-        script.setAttribute("data-clerk-publishable-key", publishableKey);
-        script.async = true;
-        script.src = `https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js`;
-        script.addEventListener("load", startClerk);
-        document.body.appendChild(script);
+            const script = document.createElement("script");
+            script.setAttribute("data-clerk-publishable-key", publishableKey);
+            script.async = true;
+            script.src = `https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js`;
+            script.addEventListener("load", startClerk);
+            document.body.appendChild(script);
+        });
     </script>
 </body>
 </html>
