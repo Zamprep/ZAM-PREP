@@ -1,11 +1,13 @@
 /* --- Global Styles & Variables --- */
 :root {
-    --primary-color: #00BFA5; /* The teal from your logo */
-    --dark-color: #2B2B2B;   /* The dark gray/black from your logo */
+    --primary-color: #00BFA5;
+    --dark-color: #2B2B2B;
     --light-gray-color: #f4f4f4;
     --white-color: #ffffff;
     --default-font: 'Poppins', sans-serif;
 }
+
+html { scroll-behavior: smooth; }
 
 body {
     font-family: var(--default-font);
@@ -15,17 +17,14 @@ body {
     line-height: 1.6;
 }
 
-.container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
 /* --- Header & Navigation --- */
 header {
     background: var(--white-color);
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     padding: 10px 5%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 nav {
@@ -34,9 +33,7 @@ nav {
     align-items: center;
 }
 
-.logo {
-    height: 50px; /* Adjust as needed */
-}
+.logo { height: 50px; }
 
 nav ul {
     list-style: none;
@@ -45,9 +42,7 @@ nav ul {
     padding: 0;
 }
 
-nav ul li {
-    margin-left: 30px;
-}
+nav ul li { margin-left: 30px; }
 
 nav ul li a {
     text-decoration: none;
@@ -56,9 +51,7 @@ nav ul li a {
     transition: color 0.3s ease;
 }
 
-nav ul li a:hover {
-    color: var(--primary-color);
-}
+nav ul li a:hover { color: var(--primary-color); }
 
 .cta-button {
     background-color: var(--primary-color);
@@ -70,9 +63,7 @@ nav ul li a:hover {
     transition: background-color 0.3s ease;
 }
 
-.cta-button:hover {
-    background-color: #00a28d;
-}
+.cta-button:hover { background-color: #00a28d; }
 
 /* --- Hero Section --- */
 .hero {
@@ -80,24 +71,9 @@ nav ul li a:hover {
     text-align: center;
     padding: 80px 20px;
 }
-
-.hero-content {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.hero-content h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-}
-
-.hero-content p {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-    color: #555;
-}
-
+.hero-content { max-width: 800px; margin: 0 auto; }
+.hero-content h1 { font-size: 3rem; font-weight: 700; margin-bottom: 20px; }
+.hero-content p { font-size: 1.2rem; margin-bottom: 30px; color: #555; }
 .cta-button-main {
     background-color: var(--primary-color);
     color: var(--white-color);
@@ -108,78 +84,53 @@ nav ul li a:hover {
     font-weight: 600;
     transition: background-color 0.3s ease;
 }
+.cta-button-main:hover { background-color: #00a28d; }
 
-.cta-button-main:hover {
-    background-color: #00a28d;
-}
-
-/* --- Features Section --- */
-.features {
-    padding: 60px 20px;
-    text-align: center;
-}
-
-.features h2 {
-    font-size: 2.5rem;
-    margin-bottom: 40px;
-}
-
-.features-grid {
+/* --- Exams & Features Sections --- */
+.exams, .features { padding: 60px 20px; text-align: center; }
+.exams { background-color: var(--white-color); }
+.features { background-color: var(--light-gray-color); }
+.exams h2, .features h2 { font-size: 2.5rem; margin-bottom: 40px; }
+.exams-grid, .features-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
     max-width: 1100px;
     margin: 0 auto;
 }
-
-.feature-card {
+.exam-card, .feature-card {
     background: var(--white-color);
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     text-align: left;
+    display: flex;
+    flex-direction: column;
 }
-
-.feature-card h3 {
-    color: var(--primary-color);
-    font-size: 1.5rem;
-    margin-top: 0;
-}
-
-/* --- Footer --- */
-footer {
+.exam-card h3, .feature-card h3 { color: var(--primary-color); font-size: 1.5rem; margin-top: 0; }
+.exam-card p, .feature-card p { flex-grow: 1; }
+.exam-button {
     background-color: var(--dark-color);
     color: var(--white-color);
+    padding: 12px 20px;
     text-align: center;
-    padding: 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+.exam-button:hover { background-color: #4c4c4c; }
+.exam-card.coming-soon {
+    background-color: var(--light-gray-color);
+    border: 2px dashed var(--primary-color);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
-/* --- Responsive Design for Mobile --- */
-@media (max-width: 768px) {
-    nav ul, .cta-button, .language-switcher {
-        display: none; /* Hides nav items for a cleaner mobile view */
-    }
-
-    .hero-content h1 {
-        font-size: 2.2rem;
-    }
-
-    .exams-grid, .features-grid {
-        grid-template-columns: 1fr;
-    }
-
-    /* THIS IS THE NEW RULE THAT FIXES THE PADDING */
-    .hero, .features, .exams {
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-}
-/* --- Dropdown Language Switcher Styles --- */
-.language-dropdown {
-    position: relative;
-    display: inline-block;
-}
-
+/* --- Language Dropdown --- */
+.language-dropdown { position: relative; display: inline-block; }
 .language-button {
     background-color: var(--light-gray-color);
     color: var(--dark-color);
@@ -191,7 +142,6 @@ footer {
     font-weight: 600;
     font-family: var(--default-font);
 }
-
 .dropdown-content {
     display: none;
     position: absolute;
@@ -200,20 +150,26 @@ footer {
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
     border-radius: 5px;
+    right: 0; /* Aligns dropdown to the right */
+}
+.dropdown-content a { color: black; padding: 12px 16px; text-decoration: none; display: block; }
+.dropdown-content a:hover { background-color: #f1f1f1; }
+.show { display: block; }
+
+/* --- Footer --- */
+footer {
+    background-color: var(--dark-color);
+    color: var(--white-color);
+    text-align: center;
+    padding: 20px;
 }
 
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
-}
-
-/* Class added by JavaScript to show the menu */
-.show {
-    display: block;
+/* --- Responsive Design for Mobile --- */
+@media (max-width: 768px) {
+    .desktop-nav, .cta-button {
+        display: none; /* Hides desktop nav items and main sign up button */
+    }
+    .hero-content h1 { font-size: 2.2rem; }
+    .exams-grid, .features-grid { grid-template-columns: 1fr; }
+    .hero, .features, .exams { padding-left: 20px; padding-right: 20px; }
 }
