@@ -8,6 +8,13 @@
     <style>
         .auth-container { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 40px 20px; }
     </style>
+
+    <script async defer
+        src="https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+        data-clerk-publishable-key="pk_test_bW9yYWwtYm9hLTM4LmNsZXJrLmFjY291bnRzLmRldiQ"
+        onload="startClerk()"
+    ></script>
+
 </head>
 <body>
     <header>
@@ -24,31 +31,33 @@
         <p>&copy; 2025 Zam Prep. Todos os direitos reservados.</p>
     </footer>
 
-    <script async defer
-        src="https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
-        data-clerk-publishable-key="pk_test_bW9yYWwtYm9hLTM4LmsuY2xlcmsuYWNjb3VudHMuZGV2JA"
-        onload="startClerk()"
-    ></script>
     <script>
         function startClerk() {
             const clerkComponent = document.getElementById('clerk-component');
             const Clerk = window.Clerk;
-            Clerk.load().then(() => {
-                Clerk.mountSignIn(clerkComponent, {
-                    localization: {
-                        socialButtonsBlockButton: "Continuar com {{provider|titleize}}",
-                        dividerText: "ou",
-                        formButtonPrimary: "Continuar",
-                        signIn: {
-                            start: {
-                                title: "Acesse sua conta",
-                                subtitle: "Bem-vindo(a) de volta! Por favor, entre para continuar",
-                                actionLink: "Não tem uma conta? Inscreva-se"
+            
+            if (clerkComponent && Clerk) {
+                try {
+                    Clerk.load().then(() => {
+                        Clerk.mountSignIn(clerkComponent, {
+                            localization: {
+                                socialButtonsBlockButton: "Continuar com {{provider|titleize}}",
+                                dividerText: "ou",
+                                formButtonPrimary: "Continuar",
+                                signIn: {
+                                    start: {
+                                        title: "Acesse sua conta",
+                                        subtitle: "Bem-vindo(a) de volta! Por favor, entre para continuar",
+                                        actionLink: "Não tem uma conta? Inscreva-se"
+                                    }
+                                }
                             }
-                        }
-                    }
-                });
-            });
+                        });
+                    });
+                } catch (error) {
+                    console.error(error);
+                }
+            }
         }
     </script>
 </body>
