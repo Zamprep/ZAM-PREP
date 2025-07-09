@@ -156,34 +156,21 @@ footer {
 
 /* --- Responsive Design for Mobile --- */
 @media (max-width: 768px) {
-    nav ul, .cta-button {
-        display: none; /* Simple hiding for now, can add a hamburger menu later */
+    nav ul, .cta-button, .language-switcher {
+        display: none; /* Hides nav items for a cleaner mobile view */
     }
+
     .hero-content h1 {
         font-size: 2.2rem;
     }
-    .features-grid {
+
+    .exams-grid, .features-grid {
         grid-template-columns: 1fr;
     }
-}
-/* --- Language Switcher Styles --- */
-.language-switcher {
-    display: flex;
-    align-items: center;
-    font-weight: 600;
-}
 
-.language-switcher a {
-    text-decoration: none;
-    color: var(--dark-color);
-    transition: color 0.3s ease;
-}
-
-.language-switcher a:hover {
-    color: var(--primary-color);
-}
-
-.language-switcher span {
-    color: var(--primary-color);
-    cursor: default;
+    /* THIS IS THE NEW RULE THAT FIXES THE PADDING */
+    .hero, .features, .exams {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 }
