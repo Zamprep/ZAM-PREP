@@ -35,23 +35,24 @@ nav {
 
 .logo { height: 50px; }
 
-nav ul {
+.nav-menu ul {
     list-style: none;
     display: flex;
+    align-items: center;
     margin: 0;
     padding: 0;
 }
 
-nav ul li { margin-left: 30px; }
+.nav-menu ul li { margin-left: 30px; }
 
-nav ul li a {
+.nav-menu ul li a {
     text-decoration: none;
     color: var(--dark-color);
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
-nav ul li a:hover { color: var(--primary-color); }
+.nav-menu ul li a:hover { color: var(--primary-color); }
 
 .cta-button {
     background-color: var(--primary-color);
@@ -61,11 +62,27 @@ nav ul li a:hover { color: var(--primary-color); }
     border-radius: 5px;
     font-weight: 600;
     transition: background-color 0.3s ease;
+    margin-left: 20px;
 }
 
 .cta-button:hover { background-color: #00a28d; }
 
-/* --- Hero Section --- */
+.nav-menu {
+    display: flex;
+    align-items: center;
+}
+
+/* --- Mobile Navigation --- */
+.mobile-nav-toggle {
+    display: none; /* Hidden on desktop */
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+/* --- Hero Section etc. --- */
+/* (The rest of your existing styles for hero, features, exams, footer go here...) */
 .hero {
     background-color: var(--light-gray-color);
     text-align: center;
@@ -85,8 +102,6 @@ nav ul li a:hover { color: var(--primary-color); }
     transition: background-color 0.3s ease;
 }
 .cta-button-main:hover { background-color: #00a28d; }
-
-/* --- Exams & Features Sections --- */
 .exams, .features { padding: 60px 20px; text-align: center; }
 .exams { background-color: var(--white-color); }
 .features { background-color: var(--light-gray-color); }
@@ -128,9 +143,15 @@ nav ul li a:hover { color: var(--primary-color); }
     justify-content: center;
     text-align: center;
 }
+footer {
+    background-color: var(--dark-color);
+    color: var(--white-color);
+    text-align: center;
+    padding: 20px;
+}
 
 /* --- Language Dropdown --- */
-.language-dropdown { position: relative; display: inline-block; }
+.language-dropdown { position: relative; display: inline-block; margin-left: 20px; }
 .language-button {
     background-color: var(--light-gray-color);
     color: var(--dark-color);
@@ -150,26 +171,54 @@ nav ul li a:hover { color: var(--primary-color); }
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
     border-radius: 5px;
-    right: 0; /* Aligns dropdown to the right */
+    right: 0;
 }
 .dropdown-content a { color: black; padding: 12px 16px; text-decoration: none; display: block; }
 .dropdown-content a:hover { background-color: #f1f1f1; }
 .show { display: block; }
 
-/* --- Footer --- */
-footer {
-    background-color: var(--dark-color);
-    color: var(--white-color);
-    text-align: center;
-    padding: 20px;
-}
-
 /* --- Responsive Design for Mobile --- */
 @media (max-width: 768px) {
-    .desktop-nav, .cta-button {
-        display: none; /* Hides desktop nav items and main sign up button */
+    .nav-menu {
+        display: none; /* Hide menu by default */
+        position: absolute;
+        top: 70px; /* Position below header */
+        left: 0;
+        right: 0;
+        background-color: white;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-    .hero-content h1 { font-size: 2.2rem; }
-    .exams-grid, .features-grid { grid-template-columns: 1fr; }
+
+    .nav-menu[data-visible="true"] {
+        display: flex; /* Show menu when toggled */
+    }
+    
+    .nav-menu ul {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .nav-menu ul li {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .cta-button {
+        margin: 10px 0;
+        text-align: center;
+    }
+    
+    .language-dropdown {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .mobile-nav-toggle {
+        display: block; /* Show hamburger button on mobile */
+    }
+
     .hero, .features, .exams { padding-left: 20px; padding-right: 20px; }
 }
