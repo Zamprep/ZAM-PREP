@@ -6,17 +6,10 @@
     <title>Inscreva-se - Zam Prep</title>
     <link rel="stylesheet" href="/style.css">
     <style>
-        .auth-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 80vh;
-            padding: 40px 20px;
-        }
+        .auth-container { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 40px 20px; }
     </style>
 </head>
 <body>
-
     <header>
         <nav>
             <a href="/pt-br/"><img src="/logo.png" alt="Logo Zam Prep" class="logo"></a>
@@ -31,17 +24,18 @@
         <p>&copy; 2025 Zam Prep. Todos os direitos reservados.</p>
     </footer>
 
+    <script async defer
+        src="https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+        data-clerk-publishable-key="pk_test_bW9yYWwtYm9hLTM4LmsuY2xlcmsuYWNjb3VudHMuZGV2JA"
+        onload="startClerk()"
+    ></script>
     <script>
-        const publishableKey = "pk_test_bW9yYWwtYm9hLTM4LmsuY2xlcmsuYWNjb3VudHMuZGV2JA";
-        const clerkComponent = document.getElementById('clerk-component');
-
-        const startClerk = async () => {
+        function startClerk() {
+            const clerkComponent = document.getElementById('clerk-component');
             const Clerk = window.Clerk;
-            try {
-                await Clerk.load();
-                // Mount the sign-up component with Portuguese localization
+            Clerk.load().then(() => {
                 Clerk.mountSignUp(clerkComponent, {
-                     localization: {
+                    localization: {
                         socialButtonsBlockButton: "Continuar com {{provider|titleize}}",
                         dividerText: "ou",
                         formButtonPrimary: "Continuar",
@@ -54,17 +48,8 @@
                         }
                     }
                 });
-            } catch (err) {
-                console.error("Clerk Error:", err);
-            }
-        };
-
-        const script = document.createElement("script");
-        script.setAttribute("data-clerk-publishable-key", publishableKey);
-        script.async = true;
-        script.src = `https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js`;
-        script.addEventListener("load", startClerk);
-        document.body.appendChild(script);
+            });
+        }
     </script>
 </body>
 </html>
