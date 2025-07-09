@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Zam Prep</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <style>
+        /* This style can be reused for all auth pages */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            padding: 40px 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <a href="/en/"><img src="/logo.png" alt="Zam Prep Logo" class="logo"></a>
+        </nav>
+    </header>
+
+    <main class="auth-container">
+        <div id="sign-up-component"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Zam Prep. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const signUpComponent = document.getElementById('sign-up-component');
+
+        // This function will run after the Clerk script is loaded
+        window.addEventListener('load', function() {
+            const publishableKey = "pk_test_bW9yYWwtYm9hLTM4LmNsZXJrLmFjY291bnRzLmRldiQ";
+            
+            // Initialize Clerk
+            const clerk = new Clerk(publishableKey);
+            clerk.load().then(() => {
+                // Mount the sign-up component into our div
+                clerk.mountSignUp(signUpComponent);
+            });
+        });
+    </script>
+    <script
+      async
+      crossorigin="anonymous"
+      data-clerk-publishable-key="pk_test_bW9yYWwtYm9hLTM4LmNsZXJrLmFjY291bnRzLmRldiQ"
+      src="https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+      type="text/javascript">
+    </script>
+
+</body>
+</html>

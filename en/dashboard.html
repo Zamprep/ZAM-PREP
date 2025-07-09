@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Zam Prep</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: var(--light-gray-color);
+        }
+
+        .dashboard-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .main-dashboard-content {
+            padding: 40px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+    <script>
+        const publishableKey = "pk_test_bW9yYWwtYm9hLTM4LmsuY2xlcmsuYWNjb3VudHMuZGV2JA";
+
+        const script = document.createElement('script');
+        script.setAttribute('data-clerk-publishable-key', publishableKey);
+        script.async = true;
+        script.src = `https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js`;
+        
+        script.addEventListener('load', async function () {
+            await Clerk.load();
+            if (!Clerk.user) {
+                // If user is not logged in, redirect them to the sign-in page
+                window.location.href = "/en/sign-in.html";
+            }
+        });
+        document.body.appendChild(script);
+    </script>
+
+    <div class="dashboard-header">
+        <h1>Welcome to your Dashboard</h1>
+        <div id="user-button"></div>
+    </div>
+
+    <div class="main-dashboard-content">
+        <h2>Your Exams</h2>
+        <p>This is where students will see their active exam prep courses, progress, and scores.</p>
+        </div>
+    
+    <footer>
+        <p>&copy; 2025 Zam Prep. All rights reserved.</p>
+    </footer>
+
+    <script>
+        window.addEventListener('load', function() {
+            const userButtonComponent = document.getElementById('user-button');
+            if (Clerk.user) {
+                Clerk.mountUserButton(userButtonComponent);
+            }
+        });
+    </script>
+
+</body>
+</html>
