@@ -6,51 +6,18 @@
     <title>Your Account - Zam Prep</title>
     <link rel="stylesheet" href="/style.css">
     <style>
-        /* Reused styles for dashboard elements */
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            background-color: var(--light-gray-color); /* Assuming this variable is defined in style.css */
-        }
-        .dashboard-header h1 {
-            margin: 0;
-            font-size: 1.5rem;
-        }
-        .portal-selection {
-            padding: 40px 20px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-        .portal-selection h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 40px;
-        }
-
+        /* Styles for dashboard elements */
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; background-color: var(--light-gray-color); }
+        .dashboard-header h1 { margin: 0; font-size: 1.5rem; }
+        .portal-selection { padding: 40px 20px; max-width: 1100px; margin: 0 auto; }
+        .portal-selection h2 { text-align: center; font-size: 2.5rem; margin-bottom: 40px;}
         /* Styles for the loading spinner */
-        .loading-spinner {
-            text-align: center;
-            padding: 50px;
-            font-size: 1.2em;
-            color: #555;
-        }
+        .loading-spinner { text-align: center; padding: 50px; font-size: 1.2em; color: #555; }
         /* Styles for the "Coming Soon" button */
-        .exam-button.coming-soon {
-            background-color: #aaa !important; /* Use !important to override .exam-button if necessary */
-            cursor: not-allowed;
-            opacity: 0.7; /* Slightly dim it to indicate it's inactive */
-        }
+        .exam-button.coming-soon { background-color: #aaa !important; cursor: not-allowed; opacity: 0.7; }
     </style>
 
-    <script async defer
-        src="https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
-        data-clerk-publishable-key="pk_test_bW9yYWwtYm9hLTM4LmNsZXJrLmFjY291bnRzLmRldiQ"
-        onload="startClerk()"
-    ></script>
-
-</head>
+    </head>
 <body>
 
     <div id="loading-spinner" class="loading-spinner">
@@ -88,43 +55,47 @@
         </footer>
     </div>
 
+    <script src="/script.js"></script>
+
     <script>
-        function startClerk() {
+        // This function will initialize Clerk for this specific dashboard page
+        async function initDashboardClerk() {
             const contentWrapper = document.querySelector('.content-wrapper');
             const userButton = document.getElementById('user-button');
             const loadingSpinner = document.getElementById('loading-spinner');
-            const Clerk = window.Clerk;
+            const Clerk = window.Clerk; // Access the global Clerk object loaded by script.js
 
-            // Hide the loading spinner once Clerk has loaded data,
-            // regardless of authentication status
-            loadingSpinner.style.display = 'none';
+            // Check if Clerk is available before proceeding
+            if (!Clerk) {
+                console.error("Clerk.js not available. Ensure script.js loads it.");
+                // Fallback: Redirect to sign-in if Clerk is not loaded
+                window.location.href = "/en/sign-in.html";
+                return;
+            }
 
-            Clerk.load().then(() => {
+            try {
+                await Clerk.load(); // Load the user's session
+
+                loadingSpinner.style.display = 'none'; // Hide loading spinner
+
                 if (Clerk.user) {
-                    // If a user is logged in
-                    contentWrapper.style.display = 'block'; // Show the main content
+                    contentWrapper.style.display = 'block'; // Show content
                     Clerk.mountUserButton(userButton); // Mount the user button
                 } else {
-                    // If no user is logged in, redirect to sign-in page
-                    window.location.href = "/en/sign-in.html";
+                    window.location.href = "/en/sign-in.html"; // Redirect if not logged in
                 }
-            }).catch(err => {
-                // Basic error handling for Clerk.load()
-                console.error("Clerk.load() failed:", err);
-                // Optionally display an error message or redirect to a general error page
-                // For now, we'll just redirect to sign-in on error as well for simplicity
-                window.location.href = "/en/sign-in.html";
-            });
+            } catch (err) {
+                console.error("Clerk dashboard initialization error:", err);
+                window.location.href = "/en/sign-in.html"; // Redirect on error
+            }
         }
 
-        // Initially hide the content wrapper and show the loading spinner
-        // This ensures the spinner is visible immediately if JS runs before Clerk.load()
+        // Initially hide content and show spinner, then call initDashboardClerk
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('.content-wrapper').style.display = 'none';
             document.getElementById('loading-spinner').style.display = 'block';
-            // Also ensure user-button is not visible before Clerk mounts it,
-            // especially if it's placed in a way that might show it empty.
-            document.getElementById('user-button').style.display = 'none';
+            document.getElementById('user-button').style.display = 'none'; // Keep user button hidden until mounted
+            initDashboardClerk(); // Start the dashboard-specific Clerk initialization
         });
     </script>
 </body>
