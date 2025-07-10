@@ -16,45 +16,17 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
     <style>
         /* CSS para rolagem suave */
-        html {
-            scroll-behavior: smooth;
-        }
-
+        html { scroll-behavior: smooth; }
         /* Estilo básico para link de navegação ativo (ajuste em style.css para melhor controle) */
-        .nav-menu ul li a.active {
-            font-weight: bold; /* Exemplo: torna o texto em negrito */
-            color: var(--primary-color, #007bff); /* Exemplo: muda a cor */
-            /* Adicione quaisquer outros estilos de estado ativo aqui */
-        }
-
-        /* Estilos para o cartão "Em Breve" */
-        .exam-card.coming-soon {
-            opacity: 0.7;
-            pointer-events: none; /* Desabilita eventos de clique em todo o cartão */
-            cursor: default;
-            position: relative;
-        }
-
+        .nav-menu ul li a.active { font-weight: bold; color: var(--primary-color, #007bff); }
+        /* Estilos para o cartão "Em Breve" overlay (do style.css) */
+        .exam-card.coming-soon { opacity: 0.7; pointer-events: none; cursor: default; position: relative; }
         .exam-card.coming-soon::after {
-            content: "Em Breve!";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 1.1em;
-            white-space: nowrap;
+            content: "Em Breve!"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7); color: white; padding: 10px 15px; border-radius: 5px;
+            font-weight: bold; font-size: 1.1em; white-space: nowrap; pointer-events: none;
         }
-
-        /* Se você quiser escurecer o botão especificamente */
-        .exam-card.coming-soon .exam-button {
-            background-color: #aaa !important;
-            cursor: not-allowed;
-        }
+        .exam-card.coming-soon .exam-button { display: none; }
     </style>
 </head>
 <body>
@@ -85,7 +57,9 @@
         </nav>
     </header>
     
-    <main> <section class="hero-section"> <div class="hero-content">
+    <main>
+        <section class="hero-section">
+            <div class="hero-content">
                 <h1>Revolucione Sua Preparação para Exames com IA</h1>
                 <p>Receba feedback instantâneo de redações, pratique com exames únicos e adaptativos, e domine matérias com minigames interativos. Seu futuro começa aqui.</p>
                 <a href="/pt-br/sign-up.html" class="cta-button-main">Comece Agora</a>
@@ -98,12 +72,15 @@
                 <div class="exam-card">
                     <h3>ENEM</h3>
                     <p>Preparação completa para o exame de vestibular mais importante do Brasil.</p>
-                    <a href="/pt-br/enem-prep.html" class="exam-button">Ir para Preparatório ENEM</a> </div>
+                    <a href="/pt-br/enem-prep.html" class="exam-button">Ir para Preparatório ENEM</a>
+                </div>
                 <div class="exam-card">
                     <h3>IELTS</h3>
                     <p>Prepare-se para o Sistema Internacional de Teste da Língua Inglesa com ferramentas de IA.</p>
-                    <a href="/pt-br/ielts-prep.html" class="exam-button">Ir para Preparatório IELTS</a> </div>
-                <div class="exam-card coming-soon" aria-disabled="true"> <h3>Mais em Breve!</h3>
+                    <a href="/pt-br/ielts-prep.html" class="exam-button">Ir para Preparatório IELTS</a>
+                </div>
+                <div class="exam-card coming-soon" aria-disabled="true">
+                    <h3>Mais em Breve!</h3>
                     <p>Estamos trabalhando constantemente para adicionar novos exames à nossa plataforma.</p>
                 </div>
             </div>
@@ -133,86 +110,5 @@
     </footer>
 
     <script src="/script.js"></script>
-    <script>
-        // Rolagem suave para links internos
-        document.querySelectorAll('a[href^="/pt-br/#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href').split('#')[1];
-                const targetElement = document.getElementById(targetId);
-                if (targetElement) {
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-                // Opcional: Fechar navegação mobile após o clique
-                const primaryNavigation = document.getElementById('primary-navigation');
-                if (primaryNavigation && primaryNavigation.getAttribute('data-visible') === 'true') {
-                    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
-                    primaryNavigation.setAttribute('data-visible', 'false');
-                    mobileNavToggle.setAttribute('aria-expanded', 'false');
-                }
-            });
-        });
-
-        // Destaque de link de navegação ativo
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.nav-menu ul li a.nav-link');
-
-        function highlightNavLink() {
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (pageYOffset >= sectionTop - sectionHeight / 3) { // Ajuste o deslocamento conforme necessário
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('data-section') === current || (current === '' && link.getAttribute('data-section') === 'hero')) {
-                    link.classList.add('active');
-                }
-            });
-        }
-
-        window.addEventListener('scroll', highlightNavLink);
-        document.addEventListener('DOMContentLoaded', highlightNavLink); // Chamar no carregamento
-
-        // Alternar Navegação Mobile (Movido de script.js se estava lá, para exemplo autocontido)
-        // Se script.js já lida com isso, mantenha-o lá e remova este bloco.
-        const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
-        const primaryNavigation = document.getElementById('primary-navigation');
-
-        if (mobileNavToggle && primaryNavigation) {
-            mobileNavToggle.addEventListener('click', () => {
-                const isExpanded = mobileNavToggle.getAttribute('aria-expanded') === 'true';
-                mobileNavToggle.setAttribute('aria-expanded', !isExpanded);
-                primaryNavigation.setAttribute('data-visible', !isExpanded); // Usar data-attribute para visibilidade
-            });
-        }
-
-        // Alternar Dropdown de Idiomas (Movido de script.js se estava lá)
-        // Se script.js já lida com isso, mantenha-o lá e remova este bloco.
-        const languageButton = document.querySelector('.language-button');
-        const dropdownContent = document.querySelector('.dropdown-content');
-
-        if (languageButton && dropdownContent) {
-            languageButton.addEventListener('click', () => {
-                const isExpanded = languageButton.getAttribute('aria-expanded') === 'true';
-                languageButton.setAttribute('aria-expanded', !isExpanded);
-                dropdownContent.style.display = isExpanded ? 'none' : 'block';
-            });
-
-            // Fechar dropdown ao clicar fora
-            document.addEventListener('click', (event) => {
-                if (!languageButton.contains(event.target) && !dropdownContent.contains(event.target)) {
-                    languageButton.setAttribute('aria-expanded', 'false');
-                    dropdownContent.style.display = 'none';
-                }
-            });
-        }
-    </script>
 </body>
 </html>
