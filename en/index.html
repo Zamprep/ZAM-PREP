@@ -3,90 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zam Prep - AI-Powered Exam Preparation</title>
-    <link rel="stylesheet" href="/style.css">
+    <title>Zam Prep - AI-Powered Exam Preparation | Revolutionize Your Studies</title>
+    <meta name="description" content="Revolutionize your exam preparation with Zam Prep's AI-powered tools: instant essay feedback, adaptive exams, and interactive mini-games. Prepare for ENEM, IELTS, and more.">
+    <meta name="keywords" content="Zam Prep, AI exam preparation, ENEM, IELTS, AI essay analysis, adaptive exams, study games, online exam prep, test preparation, artificial intelligence">
+    <meta name="author" content="Zam Prep Team">
+    <meta property="og:title" content="Zam Prep - AI-Powered Exam Preparation">
+    <meta property="og:description" content="Revolutionize your exam preparation with Zam Prep's AI-powered tools: instant essay feedback, adaptive exams, and interactive mini-games. Prepare for ENEM, IELTS, and more.">
+    <meta property="og:image" content="https://www.yourwebsite.com/social-share-image.jpg"> <meta property="og:url" content="https://www.yourwebsite.com/en/"> <meta property="og:type" content="website">
+    <link rel="canonical" href="https://www.yourwebsite.com/en/"> <link rel="stylesheet" href="/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <style>
+        /* CSS for smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Basic styling for active nav link (adjust in style.css for better control) */
+        .nav-menu ul li a.active {
+            font-weight: bold; /* Example: make it bold */
+            color: var(--primary-color, #007bff); /* Example: change color */
+            /* Add any other active state styles here */
+        }
+
+        /* Styles for the "Coming Soon" card */
+        .exam-card.coming-soon {
+            opacity: 0.7;
+            pointer-events: none; /* Disables click events on the entire card */
+            cursor: default;
+            /* Optional: Add a subtle overlay or text */
+            position: relative;
+        }
+
+        .exam-card.coming-soon::after {
+            content: "Coming Soon!";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1.1em;
+            white-space: nowrap;
+        }
+
+        /* If you want to dim the button specifically */
+        .exam-card.coming-soon .exam-button {
+            background-color: #aaa !important;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
 
     <header>
-        <nav>
-            <a href="/en/"><img src="/logo.png" alt="Zam Prep Logo" class="logo"></a>
+        <nav role="navigation" aria-label="Main Navigation">
+            <a href="/en/" class="logo-link" aria-label="Zam Prep Home"><img src="/logo.png" alt="Zam Prep Logo" class="logo"></a>
             
-            <button class="mobile-nav-toggle" aria-controls="primary-navigation" aria-expanded="false">
+            <button class="mobile-nav-toggle" aria-controls="primary-navigation" aria-expanded="false" aria-label="Open main navigation">
                 &#9776; </button>
 
-            <div class="nav-menu" id="primary-navigation">
+            <div class="nav-menu" id="primary-navigation" data-visible="false">
                 <ul>
-                    <li><a href="/en/#">Home</a></li>
-                    <li><a href="/en/#exams">Exams</a></li>
-                    <li><a href="/en/#features">Features</a></li>
-                    <li><a href="/en/sign-in.html">Login</a></li>
+                    <li><a href="/en/" class="nav-link active" data-section="hero">Home</a></li>
+                    <li><a href="/en/#exams" class="nav-link" data-section="exams">Exams</a></li>
+                    <li><a href="/en/#features" class="nav-link" data-section="features">Features</a></li>
+                    <li><a href="/en/sign-in.html" class="nav-link">Login</a></li>
                 </ul>
                 <a href="/en/sign-up.html" class="cta-button">Sign Up</a>
                 <div class="language-dropdown">
-                    <button class="language-button">English</button>
-                    <div class="dropdown-content">
-                        <a href="/en/">English</a>
-                        <a href="/pt-br/">Português</a>
+                    <button class="language-button" aria-expanded="false" aria-haspopup="true">English</button>
+                    <div class="dropdown-content" role="menu">
+                        <a href="/en/" role="menuitem" aria-current="page">English</a>
+                        <a href="/pt-br/" role="menuitem">Português</a>
                     </div>
                 </div>
             </div>
         </nav>
     </header>
 
-    <main class="hero">
-        <div class="hero-content">
-            <h1>Revolutionize Your Exam Preparation with AI</h1>
-            <p>Get instant essay feedback, practice with unique, adaptive exams, and master subjects with interactive mini-games. Your future starts here.</p>
-            <a href="#" class="cta-button-main">Get Started Now</a>
-        </div>
+    <main> <section class="hero-section"> <div class="hero-content">
+                <h1>Revolutionize Your Exam Preparation with AI</h1>
+                <p>Get instant essay feedback, practice with unique, adaptive exams, and master subjects with interactive mini-games. Your future starts here.</p>
+                <a href="/en/sign-up.html" class="cta-button-main">Get Started Now</a>
+            </div>
+        </section>
+
+        <section id="exams" class="exams">
+            <h2>Exams We Cover</h2>
+            <div class="exams-grid">
+                <div class="exam-card">
+                    <h3>ENEM</h3>
+                    <p>Comprehensive preparation for Brazil's most important university entrance exam.</p>
+                    <a href="/en/enem-prep.html" class="exam-button">Go to ENEM Prep</a> </div>
+                <div class="exam-card">
+                    <h3>IELTS</h3>
+                    <p>Prepare for the International English Language Testing System with AI-powered tools.</p>
+                    <a href="/en/ielts-prep.html" class="exam-button">Go to IELTS Prep</a> </div>
+                <div class="exam-card coming-soon" aria-disabled="true"> <h3>More Coming Soon!</h3>
+                    <p>We are constantly working to add new exams to our platform. Stay tuned!</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <h2>Our Core Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>AI Essay Analysis</h3>
+                    <p>Receive instant, detailed feedback on your writing, tailored to specific exam standards and scoring criteria.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Dynamic Exam Generation</h3>
+                    <p>Practice with unique exams created by Gemini, based on past tests and current events for each specific exam.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Adaptive Mini-Games</h3>
+                    <p>Play fun, interactive games designed to improve your knowledge. The games adapt to your ability level and exam focus.</p>
+                </div>
+            </div>
+        </section>
     </main>
-
-    <section id="exams" class="exams">
-        <h2>Exams We Cover</h2>
-        <div class="exams-grid">
-            <div class="exam-card">
-                <h3>ENEM</h3>
-                <p>Comprehensive preparation for Brazil's most important university entrance exam.</p>
-                <a href="#" class="exam-button">Go to ENEM Prep</a>
-            </div>
-            <div class="exam-card">
-                <h3>IELTS</h3>
-                <p>Prepare for the International English Language Testing System with AI-powered tools.</p>
-                <a href="#" class="exam-button">Go to IELTS Prep</a>
-            </div>
-            <div class="exam-card coming-soon">
-                <h3>More Coming Soon!</h3>
-                <p>We are constantly working to add new exams to our platform. Stay tuned!</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="features" class="features">
-        <h2>Our Core Features</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <h3>AI Essay Analysis</h3>
-                <p>Receive instant, detailed feedback on your writing, tailored to specific exam standards and scoring criteria.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Dynamic Exam Generation</h3>
-                <p>Practice with unique exams created by Gemini, based on past tests and current events for each specific exam.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Adaptive Mini-Games</h3>
-                <p>Play fun, interactive games designed to improve your knowledge. The games adapt to your ability level and exam focus.</p>
-            </div>
-        </div>
-    </section>
 
     <footer>
         <p>&copy; 2025 Zam Prep. All rights reserved.</p>
     </footer>
 
     <script src="/script.js"></script>
+    <script>
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="/en/#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').split('#')[1];
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+                // Optional: Close mobile nav after click
+                const primaryNavigation = document.getElementById('primary-navigation');
+                if (primaryNavigation && primaryNavigation.getAttribute('data-visible') === 'true') {
+                    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+                    primaryNavigation.setAttribute('data-visible', 'false');
+                    mobileNavToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+
+        // Active navigation link highlighting
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-menu ul li a.nav-link');
+
+        function highlightNavLink() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - sectionHeight / 3) { // Adjust offset as needed
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-section') === current || (current === '' && link.getAttribute('data-section') === 'hero')) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', highlightNavLink);
+        document.addEventListener('DOMContentLoaded', highlightNavLink); // Call on load
+
+        // Mobile Navigation Toggle (Moved from script.js if it was there, for self-containment example)
+        // If script.js already handles this, keep it there and remove this block.
+        const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+        const primaryNavigation = document.getElementById('primary-navigation');
+
+        if (mobileNavToggle && primaryNavigation) {
+            mobileNavToggle.addEventListener('click', () => {
+                const isExpanded = mobileNavToggle.getAttribute('aria-expanded') === 'true';
+                mobileNavToggle.setAttribute('aria-expanded', !isExpanded);
+                primaryNavigation.setAttribute('data-visible', !isExpanded); // Use data-attribute for visibility
+            });
+        }
+
+        // Language Dropdown Toggle (Moved from script.js if it was there)
+        // If script.js already handles this, keep it there and remove this block.
+        const languageButton = document.querySelector('.language-button');
+        const dropdownContent = document.querySelector('.dropdown-content');
+
+        if (languageButton && dropdownContent) {
+            languageButton.addEventListener('click', () => {
+                const isExpanded = languageButton.getAttribute('aria-expanded') === 'true';
+                languageButton.setAttribute('aria-expanded', !isExpanded);
+                dropdownContent.style.display = isExpanded ? 'none' : 'block';
+            });
+
+            // Close dropdown if clicked outside
+            document.addEventListener('click', (event) => {
+                if (!languageButton.contains(event.target) && !dropdownContent.contains(event.target)) {
+                    languageButton.setAttribute('aria-expanded', 'false');
+                    dropdownContent.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </body>
 </html>
