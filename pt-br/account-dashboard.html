@@ -16,7 +16,6 @@
         /* Estilos para o botão "Em Breve" */
         .exam-button.coming-soon { background-color: #aaa !important; cursor: not-allowed; opacity: 0.7; }
     </style>
-
     </head>
 <body>
     
@@ -47,8 +46,9 @@
                         <a href="#" class="exam-button coming-soon">Em Breve</a>
                     </div>
                 </div>
-            </main>
-            
+            </div>
+        </main>
+        
         <footer>
             <p>&copy; 2025 Zam Prep. Todos os direitos reservados.</p>
         </footer>
@@ -57,24 +57,20 @@
     <script src="/script.js"></script>
 
     <script>
-        // Esta função inicializará o Clerk para esta página de painel específica
         async function initDashboardClerk() {
             const contentWrapper = document.querySelector('.content-wrapper');
             const userButton = document.getElementById('user-button');
             const loadingSpinner = document.getElementById('loading-spinner');
             const Clerk = window.Clerk; // Acessa o objeto global Clerk carregado por script.js
 
-            // Verifica se o Clerk está disponível antes de prosseguir
             if (!Clerk) {
-                console.error("Clerk.js não disponível. Certifique-se de que script.js o carrega.");
-                // Fallback: Redireciona para o login se o Clerk não estiver carregado
+                console.error("Clerk.js não disponível. Redirecionando.");
                 window.location.href = "/pt-br/sign-in.html";
                 return;
             }
 
             try {
                 await Clerk.load(); // Carrega a sessão do usuário
-
                 loadingSpinner.style.display = 'none'; // Oculta o indicador de carregamento
 
                 if (Clerk.user) {
@@ -89,7 +85,6 @@
             }
         }
 
-        // Inicialmente oculta o conteúdo e mostra o indicador de carregamento, então chama initDashboardClerk
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('.content-wrapper').style.display = 'none';
             document.getElementById('loading-spinner').style.display = 'block';
