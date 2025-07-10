@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (langButton && dropdownContent) {
         langButton.addEventListener('click', function(event) {
-            event.stopPropagation(); // Prevents click from bubbling to window.onclick immediately
+            event.stopPropagation(); // Prevents click from bubbling to document.addEventListener below
             const isExpanded = this.getAttribute('aria-expanded') === 'true';
             this.setAttribute('aria-expanded', !isExpanded);
             dropdownContent.classList.toggle('show', !isExpanded); // Toggle 'show' based on expansion
@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- Mobile Navigation Toggle Logic ---
-    // This part should be consistent with the HTML's data-visible attribute
     if (mobileNavToggle && navMenu) {
         mobileNavToggle.addEventListener('click', () => {
             const isExpanded = mobileNavToggle.getAttribute('aria-expanded') === 'true';
@@ -51,20 +50,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- Clerk Integration and Smart Header Logic ---
+    // --- Clerk Integration and Smart Header / Auth Page Mounting Logic ---
     const Clerk = window.Clerk; // Access global Clerk object if already defined
 
     // This function physically changes the header elements based on login state
     function updateHeader(ClerkInstance) {
         const user = ClerkInstance.user;
-        const navList = document.querySelector('.nav-menu ul'); // Corrected selector
-        const loginLink = document.querySelector('.nav-menu ul li a[href*="sign-in.html"]'); // Select specific login link
+        const navList = document.querySelector('.nav-menu ul');
+        const loginLink = document.querySelector('.nav-menu ul li a[href*="sign-in.html"]');
         const signupButton = document.querySelector('a.cta-button[href*="sign-up.html"]');
         const currentLanguage = document.documentElement.lang;
 
         // Ensure we have the necessary elements before proceeding
         if (!navList || !signupButton) {
-            console.warn("Missing critical header elements for Clerk integration.");
+            // This might happen on pages without the full header (e.g., auth pages), which is fine.
             return;
         }
 
@@ -72,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // --- User is logged in ---
 
             // 1. Remove "Login" link if it exists
-            if (loginLink && loginLink.parentElement) { // Check parent exists before removing
+            if (loginLink && loginLink.parentElement) {
                 loginLink.parentElement.remove();
             }
 
@@ -81,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!existingAccountLink) {
                 const myAccountItem = document.createElement('li');
                 const myAccountLink = document.createElement('a');
-                myAccountLink.textContent = 'My Account';
+                myAccountLink.textContent = currentLanguage === 'en' ? 'My Account' : 'Minha Conta';
                 myAccountLink.href = currentLanguage === 'en' ? '/en/account-dashboard.html' : '/pt-br/account-dashboard.html';
                 myAccountLink.classList.add('nav-link'); // Add nav-link class for styling
                 myAccountItem.appendChild(myAccountLink);
@@ -91,19 +90,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 existingAccountLink.textContent = currentLanguage === 'en' ? 'My Account' : 'Minha Conta';
             }
 
-
             // 3. Replace "Sign Up" button with Clerk User Button
             let userButtonContainer = document.getElementById('clerk-user-button-container');
             if (!userButtonContainer) {
                 userButtonContainer = document.createElement('div');
                 userButtonContainer.id = 'clerk-user-button-container';
-                // To maintain styling, maybe wrap it in a div that mimics cta-button's margin/position
-                // For now, we'll replace the signup button directly.
+                // Replace the signup button with this container
                 signupButton.parentNode.replaceChild(userButtonContainer, signupButton);
             }
-            // Only mount if not already mounted (Clerk handles this somewhat, but explicit check helps)
-            // Note: Clerk.userButtonMounted() is not a public API. Rely on Clerk's internal checks or a flag.
-            // For simplicity, Clerk.mountUserButton will generally handle re-mounting safely.
             ClerkInstance.mountUserButton(userButtonContainer);
 
         } else {
@@ -145,9 +139,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 newSignupButton.textContent = currentLanguage === 'en' ? 'Sign Up' : 'Inscreva-se';
                 newSignupButton.href = currentLanguage === 'en' ? '/en/sign-up.html' : '/pt-br/sign-up.html';
                 newSignupButton.classList.add('cta-button');
-                navList.parentNode.appendChild(newSignupButton); // Append to parent of navList if no specific spot
+                // Append to parent of navList if no specific spot (e.g., header nav)
+                document.querySelector('nav').appendChild(newSignupButton); // Changed from navList.parentNode
             }
-
 
             // 3. Remove "My Account" link if it exists (if logging out from an account dashboard page)
             const myAccountLink = document.querySelector('.nav-menu ul li a[href*="account-dashboard.html"]');
@@ -161,24 +155,72 @@ document.addEventListener('DOMContentLoaded', function() {
     async function initializeClerkAndHeader() {
         if (!window.Clerk) {
             console.error("Clerk object not found. Clerk.js might not have loaded correctly.");
+            // Handle error: perhaps display a message or redirect for pages expecting Clerk
             return;
         }
 
         try {
             await window.Clerk.load(); // Use window.Clerk to be explicit
+
+            const path = window.location.pathname;
+            const currentLanguage = document.documentElement.lang || 'en';
+
+            // --- Logic for Sign-In/Sign-Up pages ---
+            if (path.includes('/sign-in.html') || path.includes('/sign-up.html')) {
+                const authContainerId = path.includes('/sign-in.html') ? 'sign-in-container' : 'sign-up-container';
+                const authContainer = document.getElementById(authContainerId);
+                const loadingSpinner = document.getElementById('loading-spinner');
+
+                if (authContainer) {
+                    loadingSpinner.style.display = 'none'; // Hide spinner
+                    // Check if already logged in, then redirect
+                    if (window.Clerk.user) {
+                        // Determine redirect path (to onboarding if sign-up and onboarding is needed, else to dashboard)
+                        let redirectPath = currentLanguage === 'en' ? '/en/account-dashboard.html' : '/pt-br/account-dashboard.html';
+                        if (path.includes('/sign-up.html')) {
+                            // If user just signed up, redirect to onboarding if applicable
+                            redirectPath = currentLanguage === 'en' ? '/en/onboarding.html' : '/pt-br/onboarding.html';
+                        }
+                        window.location.href = redirectPath;
+                        return; // Exit if redirecting
+                    } else {
+                        // Not logged in, mount the form
+                        authContainer.style.display = 'flex'; // Show container
+                        if (path.includes('/sign-in.html')) {
+                            Clerk.mountSignIn(authContainer);
+                        } else {
+                            Clerk.mountSignUp(authContainer);
+                        }
+                    }
+                }
+                return; // Stop execution for auth pages
+            }
+
+            // --- Logic for other pages (Homepage, Dashboards) ---
             updateHeader(window.Clerk);
 
             // Add an event listener to update the header whenever the user logs in or out
             window.Clerk.addListener(({ user }) => {
                 updateHeader(window.Clerk);
             });
+
         } catch (err) {
             console.error("Clerk initialization error:", err);
-            // Optionally, show a fallback UI or redirect
+            // Fallback for pages that expect Clerk (e.g., dashboards)
+            const loadingSpinner = document.getElementById('loading-spinner');
+            if (loadingSpinner) {
+                loadingSpinner.style.display = 'none';
+            }
+            const currentLanguage = document.documentElement.lang || 'en';
+            if (window.location.pathname.includes('/account-dashboard.html') || window.location.pathname.includes('enem.zamprep.com') || window.location.pathname.includes('/onboarding.html')) {
+                // For secure, members-only pages, redirect to sign-in on Clerk init error
+                window.location.href = currentLanguage === 'en' ? '/en/sign-in.html' : '/pt-br/sign-in.html';
+            }
+            // For homepage, simply log error and continue
         }
     }
 
-    // Dynamically load Clerk.js
+    // Dynamically load Clerk.js (This part ensures Clerk is available site-wide)
     function loadClerkScript() {
         if (document.getElementById('clerk-script')) {
             // Script already exists, do nothing
@@ -191,9 +233,13 @@ document.addEventListener('DOMContentLoaded', function() {
         script.async = true;
         script.defer = true; // Use defer as well for better performance
         script.src = CLERK_SCRIPT_URL;
-        script.addEventListener("load", initializeClerkAndHeader);
+        script.addEventListener("load", initializeClerkAndHeader); // Call main init func after load
         script.addEventListener("error", () => {
             console.error("Failed to load Clerk.js script.");
+            // Handle error if Clerk.js itself fails to download
+            const loadingSpinner = document.getElementById('loading-spinner');
+            if (loadingSpinner) loadingSpinner.style.display = 'none';
+            // For auth/members-only pages, might show a message or redirect
         });
         document.head.appendChild(script); // Append to head for better practice
     }
@@ -201,8 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial call to load Clerk
     loadClerkScript();
 
-    // --- Smooth Scrolling for Internal Links ---
-    // This was added in the previous HTML inline script, but it's better to manage it here
+    // --- Smooth Scrolling for Internal Links (Common) ---
     document.querySelectorAll('a[href^="/en/#"], a[href^="/pt-br/#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -221,8 +266,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // --- Active Navigation Link Highlighting ---
-    // This was also added in the previous HTML inline script.
+    // --- Active Navigation Link Highlighting (Common) ---
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-menu ul li a.nav-link');
 
@@ -240,9 +284,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Handle the "Home" link if at the very top or above the first section
-        if (pageYOffset < sections[0].offsetTop - offset) {
+        // This is primarily for the main index pages
+        if (sections.length > 0 && pageYOffset < sections[0].offsetTop - offset) {
             current = 'hero'; // Assuming 'hero' corresponds to the home section
+        } else if (sections.length === 0 && window.location.pathname.match(/^\/(en|pt-br)\/?$/)) {
+             // If on a main index page with no sections (or if sections load later), default to 'hero'
+             current = 'hero';
         }
+
 
         navLinks.forEach(link => {
             link.classList.remove('active');
