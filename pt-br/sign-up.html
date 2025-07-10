@@ -40,6 +40,8 @@
                 try {
                     Clerk.load().then(() => {
                         Clerk.mountSignUp(clerkComponent, {
+                            // THIS IS THE UPDATED LINE
+                            redirectUrl: '/pt-br/', // After sign-up, redirect to the Portuguese homepage
                             localization: {
                                 socialButtonsBlockButton: "Continuar com {{provider|titleize}}",
                                 dividerText: "ou",

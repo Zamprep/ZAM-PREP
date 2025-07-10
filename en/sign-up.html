@@ -39,7 +39,10 @@
             if (clerkComponent && Clerk) {
                 try {
                     Clerk.load().then(() => {
-                        Clerk.mountSignUp(clerkComponent);
+                        Clerk.mountSignUp(clerkComponent, {
+                            // THIS IS THE UPDATED LINE
+                            redirectUrl: '/en/' // After sign-up, redirect to the English homepage
+                        });
                     });
                 } catch (error) {
                     console.error(error);

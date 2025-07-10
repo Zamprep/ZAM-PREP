@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Account - Zam Prep</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; background-color: var(--light-gray-color); }
+        .dashboard-header h1 { margin: 0; font-size: 1.5rem; }
+        .portal-selection { padding: 40px 20px; max-width: 1100px; margin: 0 auto; }
+        .portal-selection h2 { text-align: center; font-size: 2.5rem; margin-bottom: 40px;}
+        /* We can reuse the exam-grid styles from the homepage */
+    </style>
+
+    <script async defer
+        src="https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+        data-clerk-publishable-key="pk_test_bW9yYWwtYm9hLTM4LmNsZXJrLmFjY291bnRzLmRldiQ"
+        onload="startClerk()"
+    ></script>
+
+</head>
+<body>
+    
+    <div class="content-wrapper" style="display: none;">
+        <header>
+            <nav>
+                <a href="/en/"><img src="/logo.png" alt="Zam Prep Logo" class="logo"></a>
+                <div id="user-button"></div>
+            </nav>
+        </header>
+
+        <main>
+            <div class="portal-selection">
+                <h2>Choose Your Prep Portal</h2>
+                <div class="exams-grid">
+                    <div class="exam-card">
+                        <h3>ENEM</h3>
+                        <p>Access your personalized dashboard, AI essay analysis tool, and practice questions for the ENEM exam.</p>
+                        <a href="https://enem.zamprep.com" class="exam-button">Go to ENEM Portal</a>
+                    </div>
+                    <div class="exam-card">
+                        <h3>IELTS</h3>
+                        <p>Prepare for the IELTS exam with our dedicated tools. (Coming Soon)</p>
+                        <a href="#" class="exam-button" style="background-color: #aaa; cursor: not-allowed;">Coming Soon</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 Zam Prep. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        function startClerk() {
+            const contentWrapper = document.querySelector('.content-wrapper');
+            const userButton = document.getElementById('user-button');
+            const Clerk = window.Clerk;
+
+            Clerk.load().then(() => {
+                if (Clerk.user) {
+                    contentWrapper.style.display = 'block';
+                    Clerk.mountUserButton(userButton);
+                } else {
+                    window.location.href = "/en/sign-in.html"; 
+                }
+            });
+        }
+    </script>
+</body>
+</html>
