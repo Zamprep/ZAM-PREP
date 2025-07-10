@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     // --- Global Constants & Selectors ---
-    // Make sure this matches your Clerk Publishable Key
-    const CLERK_PUBLISHABLE_KEY = "pk_test_bW9yYWwtYm9hLTM4LmNsZXJrLmFjY291bnRzLmRldiQ";
-    const CLERK_SCRIPT_URL = `https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js`;
+    // UPDATED: Clerk Publishable Key
+    const CLERK_PUBLISHABLE_KEY = "pk_test_ZGlzdGluY3QtYW50LTMyLmNsZXJrLmFjY291bnRzLmRldiQ";
+    const CLERK_SCRIPT_URL = `https://distinct-ant-32.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js`; // Updated domain based on key
 
     const navMenu = document.getElementById('primary-navigation'); // The main nav container for mobile toggle
     const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     newSignupButton.href = currentLanguage === 'en' ? '/en/sign-up.html' : '/pt-br/sign-up.html';
                     newSignupButton.classList.add('cta-button'); // Re-add class for styling
                     // Insert where the user button container was
-                    userButtonContainer.parentNode.replaceChild(newSignupButton, userButtonContainer);
+                    document.querySelector('nav').appendChild(newSignupButton); // Changed from navList.parentNode
                 }
             } else if (!currentSignupButton) {
                 // If no user button container and no signup button (initial state or error), add signup
@@ -139,8 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 newSignupButton.textContent = currentLanguage === 'en' ? 'Sign Up' : 'Inscreva-se';
                 newSignupButton.href = currentLanguage === 'en' ? '/en/sign-up.html' : '/pt-br/sign-up.html';
                 newSignupButton.classList.add('cta-button');
-                // Append to parent of navList if no specific spot (e.g., header nav)
-                document.querySelector('nav').appendChild(newSignupButton); // Changed from navList.parentNode
+                document.querySelector('nav').appendChild(newSignupButton); // Append to parent of navList if no specific spot
             }
 
             // 3. Remove "My Account" link if it exists (if logging out from an account dashboard page)
@@ -212,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 loadingSpinner.style.display = 'none';
             }
             const currentLanguage = document.documentElement.lang || 'en';
-            if (window.location.pathname.includes('/account-dashboard.html') || window.location.pathname.includes('enem.zamprep.com') || window.location.pathname.includes('/onboarding.html')) {
+            if (window.location.pathname.includes('/account-dashboard.html') || window.location.host.includes('enem.zamprep.com') || window.location.pathname.includes('/onboarding.html')) { // Corrected host check
                 // For secure, members-only pages, redirect to sign-in on Clerk init error
                 window.location.href = currentLanguage === 'en' ? '/en/sign-in.html' : '/pt-br/sign-in.html';
             }
