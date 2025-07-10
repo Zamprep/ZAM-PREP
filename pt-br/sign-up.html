@@ -3,64 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscreva-se - Zam Prep</title>
-    <link rel="stylesheet" href="/style.css">
+    <title>Criar Sua Conta - Zam Prep</title>
+    <meta name="description" content="Crie sua conta gratuita na Zam Prep para começar a revolucionar sua preparação para exames com IA.">
+    <meta name="keywords" content="cadastro, criar conta, registrar, Zam Prep, inscrição gratuita">
+    <meta name="author" content="Equipe Zam Prep">
+    <meta property="og:title" content="Criar Conta - Zam Prep">
+    <meta property="og:description" content="Crie sua conta gratuita na Zam Prep para começar a revolucionar sua preparação para exames com IA.">
+    <meta property="og:image" content="https://www.seuwebsite.com/social-share-signup.jpg"> <meta property="og:url" content="https://www.seuwebsite.com/pt-br/sign-up.html"> <meta property="og:type" content="website">
+    <link rel="canonical" href="https://www.seuwebsite.com/pt-br/sign-up.html"> <link rel="stylesheet" href="/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
     <style>
-        .auth-container { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 40px 20px; }
+        /* Basic styling for the main container to center Clerk's component */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - var(--header-height, 70px) - 60px); /* Adjust height to fill viewport minus header/footer */
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: var(--light-gray-color); /* Match body background */
+        }
+        /* Styles for the loading spinner */
+        .loading-spinner { text-align: center; padding: 50px; font-size: 1.2em; color: #555; }
+        /* Simple header for auth pages if you don't want the full nav */
+        .auth-header {
+            background: var(--white-color);
+            box-shadow: 0 2px 4px var(--border-color);
+            padding: 10px 5%;
+            min-height: var(--header-height, 70px);
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center logo in auth header */
+        }
     </style>
-
-    <script async defer
-        src="https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
-        data-clerk-publishable-key="pk_test_bW9yYWwtYm9hLTM4LmNsZXJrLmFjY291bnRzLmRldiQ"
-        onload="startClerk()"
-    ></script>
-
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="/pt-br/"><img src="/logo.png" alt="Logo Zam Prep" class="logo"></a>
-        </nav>
+
+    <header class="auth-header">
+        <a href="https://zamprep.com/pt-br/"><img src="/logo.png" alt="Logo Zam Prep" class="logo"></a>
     </header>
 
-    <main class="auth-container">
-        <div id="clerk-component"></div>
-    </main>
-    
+    <div id="loading-spinner" class="loading-spinner">
+        Carregando formulário de cadastro...
+    </div>
+
+    <div id="sign-up-container" class="auth-container" style="display: none;">
+        </div>
+
     <footer>
         <p>&copy; 2025 Zam Prep. Todos os direitos reservados.</p>
     </footer>
 
+    <script src="/script.js"></script>
+
     <script>
-        function startClerk() {
-            const clerkComponent = document.getElementById('clerk-component');
+        document.addEventListener('DOMContentLoaded', async function() {
+            const signUpContainer = document.getElementById('sign-up-container');
+            const loadingSpinner = document.getElementById('loading-spinner');
             const Clerk = window.Clerk;
-            
-            if (clerkComponent && Clerk) {
-                try {
-                    Clerk.load().then(() => {
-                        Clerk.mountSignUp(clerkComponent, {
-                            // THIS IS THE UPDATED LINE
-                            redirectUrl: '/pt-br/', // After sign-up, redirect to the Portuguese homepage
-                            localization: {
-                                socialButtonsBlockButton: "Continuar com {{provider|titleize}}",
-                                dividerText: "ou",
-                                formButtonPrimary: "Continuar",
-                                signUp: {
-                                    start: {
-                                        title: "Crie sua conta",
-                                        subtitle: "Bem-vindo(a)! Por favor, crie sua conta para continuar",
-                                        actionLink: "Já tem uma conta? Entre"
-                                    }
-                                }
-                            }
-                        });
-                    });
-                } catch (error) {
-                    console.error(error);
-                }
+
+            if (!Clerk) {
+                console.error("Clerk.js não disponível.");
+                loadingSpinner.style.display = 'none'; // Hide spinner even on error
+                return;
             }
-        }
+
+            try {
+                await Clerk.load(); // Load Clerk's user session
+                loadingSpinner.style.display = 'none'; // Hide loading spinner
+
+                // Check if user is already logged in
+                if (Clerk.user) {
+                    // If already logged in, redirect to onboarding if needed, otherwise to dashboard
+                    // You might want to check Clerk.user.publicMetadata.onboarding_complete here
+                    window.location.href = "https://zamprep.com/pt-br/onboarding.html"; // Or directly to dashboard
+                } else {
+                    // Mount the Sign Up component
+                    signUpContainer.style.display = 'flex'; // Show the container
+                    Clerk.mountSignUp(signUpContainer);
+                }
+            } catch (err) {
+                console.error("Erro ao carregar o Clerk para a página de cadastro:", err);
+                loadingSpinner.style.display = 'none'; // Hide spinner on error
+                signUpContainer.innerHTML = '<p style="color: red; text-align: center;">Não foi possível carregar o formulário de cadastro. Por favor, tente novamente mais tarde.</p>';
+                signUpContainer.style.display = 'flex';
+            }
+        });
     </script>
 </body>
 </html>
