@@ -11,7 +11,6 @@
     </style>
 </head>
 <body>
-
     <header class="auth-header">
         <nav>
             <a href="/en/"><img src="/logo.png" alt="Zam Prep Logo" class="logo"></a>
@@ -27,9 +26,9 @@
     </footer>
 
     <script async defer
-        src="https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
-        data-clerk-publishable-key="pk_test_bW9yYWwtYm9hLTM4LmNsZXJrLmFjY291bnRzLmRldiQ"
-        onload="const clerk = new Clerk('pk_test_bW9yYWwtYm9hLTM4LmNsZXJrLmFjY291bnRzLmRldiQ'); clerk.load().then(() => { clerk.mountSignUp(document.getElementById('clerk-sign-up'), { afterSignUpUrl: '/en/onboarding.html' }); });"
+        src="https://distinct-ant-32.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+        data-clerk-publishable-key="pk_test_ZGlzdGluY3QtYW50LTMyLmNsZXJrLmFjY291bnRzLmRldiQ"
+        onload="const mountPoint = document.getElementById('clerk-sign-up'); const clerk = new window.Clerk('pk_test_ZGlzdGluY3QtYW50LTMyLmNsZXJrLmFjY291bnRzLmRldiQ'); clerk.load().then(() => { clerk.mountSignUp(mountPoint, { afterSignUpUrl: '/en/onboarding.html' }); });"
     ></script>
 </body>
 </html>
