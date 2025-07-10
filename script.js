@@ -1,15 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
-
+    
     // --- Global Clerk Configuration ---
     const CLERK_PUBLISHABLE_KEY = "pk_test_bW9yYWwtYm9hLTM4LmNsZXJrLmFjY291bnRzLmRldiQ";
     const CLERK_SCRIPT_URL = `https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js`;
-
-    // --- Sitewide Menu Logic (Hamburger and Dropdown) ---
+    
+    // --- Sitewide Menu Logic ---
+    // (This part is correct and remains the same)
     const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
-    const langButton = document.querySelector('.language-button');
-    const dropdownContent = document.querySelector('.dropdown-content');
-
     if (mobileNavToggle && navMenu) {
         mobileNavToggle.addEventListener('click', () => {
             const isVisible = navMenu.getAttribute('data-visible') === 'true';
@@ -17,103 +15,79 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    const langButton = document.querySelector('.language-button');
+    const dropdownContent = document.querySelector('.dropdown-content');
     if (langButton && dropdownContent) {
         langButton.addEventListener('click', (event) => {
             event.stopPropagation();
             dropdownContent.classList.toggle('show');
         });
-        document.addEventListener('click', (event) => {
-            if (!langButton.contains(event.target) && !dropdownContent.contains(event.target)) {
-                dropdownContent.classList.remove('show');
-            }
-        });
     }
-
-    // --- Clerk Initialization and Page-Specific Logic ---
-    function initializeClerk() {
-        const Clerk = window.Clerk;
-        if (!Clerk) {
-            console.error("Clerk.js not loaded.");
-            return;
+    document.addEventListener('click', (event) => {
+        if (langButton && !langButton.contains(event.target) && dropdownContent && !dropdownContent.contains(event.target)) {
+            dropdownContent.classList.remove('show');
         }
+    });
 
-        const path = window.location.pathname;
+    // --- Clerk Initialization ---
+    // This function runs after the Clerk script from the HTML has loaded
+    window.startClerk = async function() {
+        const Clerk = window.Clerk;
+        if (!Clerk) { return; }
 
-        const mountSignIn = () => {
-            const container = document.getElementById('sign-in-container');
-            if(container) Clerk.mountSignIn(container);
-        };
-        const mountSignUp = () => {
-            const container = document.getElementById('sign-up-container');
-            if(container) Clerk.mountSignUp(container, { redirectUrl: '/onboarding.html' });
-        };
-        const initializeOnboarding = () => {
-            // Logic for onboarding.html (form submission, etc.) goes here
-        };
-        const initializeAccountDashboard = () => {
-            const userButton = document.getElementById('user-button');
-            if(userButton) Clerk.mountUserButton(userButton);
-        };
+        try {
+            await Clerk.load();
+            
+            const path = window.location.pathname;
+            const mountPoint = document.getElementById('clerk-component');
+            const pageLang = document.documentElement.lang || 'en';
 
-        const protectPage = (redirectPath) => {
-            if (!Clerk.user) {
-                window.location.href = redirectPath;
-            } else {
-                // Show content if user is verified
-                const content = document.querySelector('.content-wrapper');
-                const spinner = document.getElementById('loading-spinner');
-                if(content) content.style.display = 'block';
-                if(spinner) spinner.style.display = 'none';
+            // --- THIS IS THE CORRECTED LOGIC ---
+            // It now checks for URLs with OR without .html
+            if (path.endsWith('/sign-in') || path.endsWith('/sign-in.html')) {
+                if (mountPoint) Clerk.mountSignIn(mountPoint);
+            } else if (path.endsWith('/sign-up') || path.endsWith('/sign-up.html')) {
+                const redirectUrl = pageLang.startsWith('en') ? '/en/onboarding.html' : '/pt-br/onboarding.html';
+                if (mountPoint) Clerk.mountSignUp(mountPoint, { afterSignUpUrl: redirectUrl });
             }
-        };
-        
-        Clerk.load().then(() => {
-            // This runs on every page
+            // --- END OF CORRECTION ---
+
+            // This part updates the header on every page
             updateHeader(Clerk);
             Clerk.addListener(({ user }) => updateHeader(Clerk));
 
-            // Run logic based on which page we are on
-            if (path.includes('/sign-in.html')) {
-                mountSignIn();
-            } else if (path.includes('/sign-up.html')) {
-                mountSignUp();
-            } else if (path.includes('/account-dashboard.html')) {
-                protectPage('/en/sign-in.html'); // Example redirect path
-                initializeAccountDashboard();
-            } else if (path.includes('/onboarding.html')) {
-                protectPage('/en/sign-in.html');
-                initializeOnboarding();
-            }
-        }).catch(error => {
-            console.error("Clerk error:", error);
-        });
-    }
-    
-    function updateHeader(Clerk) {
-        // The smart header logic we built previously
-        const user = Clerk.user;
-        const navList = document.querySelector('.nav-menu ul');
-        const loginLink = document.querySelector('a[href*="sign-in.html"]');
-        const signupButton = document.querySelector('a.cta-button');
-
-        if (!navList) return; // Don't run on simplified auth headers
-
-        if (user) {
-            if(loginLink) loginLink.parentElement.innerHTML = `<a href="/en/account-dashboard.html">My Account</a>`;
-            if(signupButton) {
-                const userButtonContainer = document.createElement('div');
-                userButtonContainer.id = 'user-button-container';
-                signupButton.replaceWith(userButtonContainer);
-                Clerk.mountUserButton(userButtonContainer);
-            }
+        } catch (err) {
+            console.error("Clerk Error:", err);
         }
     }
+    
+    // This function physically changes the header elements
+    function updateHeader(Clerk) {
+        const user = Clerk.user;
+        const loginLink = document.querySelector('a[href*="sign-in.html"]');
+        const signupButton = document.querySelector('a.cta-button');
+        const navList = document.querySelector('.nav-menu ul');
+        
+        if (!navList) return; // Don't run this logic on auth pages with no main nav
 
-    // Load the Clerk script, then initialize everything
-    const script = document.createElement("script");
-    script.setAttribute("data-clerk-publishable-key", CLERK_PUBLISHABLE_KEY);
-    script.async = true;
-    script.src = CLERK_SCRIPT_URL;
-    script.addEventListener("load", initializeClerk);
-    document.head.appendChild(script);
+        const accountLink = navList.querySelector('a[href*="account-dashboard.html"]');
+
+        if (user) {
+            // User is logged in
+            if (loginLink) loginLink.parentElement.style.display = 'none';
+            if (signupButton) signupButton.style.display = 'none';
+            
+            if (!accountLink) {
+                const myAccountItem = document.createElement('li');
+                const lang = document.documentElement.lang.startsWith('en') ? 'en' : 'pt-br';
+                myAccountItem.innerHTML = `<a href="/${lang}/account-dashboard.html">${lang === 'en' ? 'My Account' : 'Minha Conta'}</a>`;
+                navList.appendChild(myAccountItem);
+            }
+        } else {
+            // User is logged out
+            if (loginLink) loginLink.parentElement.style.display = 'list-item';
+            if (signupButton) signupButton.style.display = 'inline-flex';
+            if (accountLink) accountLink.parentElement.remove();
+        }
+    }
 });
