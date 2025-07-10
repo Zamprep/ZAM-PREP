@@ -17,7 +17,6 @@
 
 </head>
 <body>
-
     <header class="auth-header">
         <nav>
             <a href="/en/"><img src="/logo.png" alt="Zam Prep Logo" class="logo"></a>
@@ -35,17 +34,19 @@
     <script>
         window.addEventListener('load', function () {
             const mountPoint = document.getElementById('clerk-sign-in');
-            const Clerk = window.Clerk; // Now Clerk will be fully ready
-
-            if (mountPoint && Clerk) {
-                try {
-                    Clerk.mountSignIn(mountPoint);
-                } catch (error) {
-                    console.error("Clerk mounting error:", error);
+            
+            function tryToMountClerk() {
+                // Check if the Clerk object is loaded and ready
+                if (window.Clerk && window.Clerk.loaded) {
+                    window.Clerk.mountSignIn(mountPoint);
+                } else {
+                    // If not ready, wait a short time and try again
+                    setTimeout(tryToMountClerk, 100);
                 }
-            } else {
-                console.error("Clerk object or mount point not found.");
             }
+
+            // Start the process
+            tryToMountClerk();
         });
     </script>
 </body>
