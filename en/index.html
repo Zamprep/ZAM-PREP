@@ -10,23 +10,17 @@
     <meta property="og:title" content="Zam Prep - AI-Powered Exam Preparation">
     <meta property="og:description" content="Revolutionize your exam preparation with Zam Prep's AI-powered tools: instant essay feedback, adaptive exams, and interactive mini-games. Prepare for ENEM, IELTS, and more.">
     <meta property="og:image" content="https://www.yourwebsite.com/social-share-image.jpg"> <meta property="og:url" content="https://www.yourwebsite.com/en/"> <meta property="og:type" content="website">
-    <link rel="canonical" href="https://www.yourwebsite.com/en/"> <link rel="stylesheet" href="/style.css">
+    <link rel="canonical" href="https://www.yourwebsite.com/en/"> <link rel="stylesheet" href="/style.css"> 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
     <style>
-        /* CSS for smooth scrolling */
-        html { scroll-behavior: smooth; }
         /* Basic styling for active nav link (adjust in style.css for better control) */
         .nav-menu ul li a.active { font-weight: bold; color: var(--primary-color, #007bff); }
-        /* Styles for the "Coming Soon" card overlay (from style.css) */
-        .exam-card.coming-soon { opacity: 0.7; pointer-events: none; cursor: default; position: relative; }
-        .exam-card.coming-soon::after {
-            content: "Coming Soon!"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.7); color: white; padding: 10px 15px; border-radius: 5px;
-            font-weight: bold; font-size: 1.1em; white-space: nowrap; pointer-events: none;
-        }
-        .exam-card.coming-soon .exam-button { display: none; }
+        /* Styles for the "Coming Soon" card overlay (defined in global style.css) */
+        /* If using a single CSS file for multiple languages, this text will be static.
+           For dynamic text, define it in inline <style> per language HTML file if you need override. */
+        .exam-card.coming-soon::after { content: "Coming Soon!"; }
     </style>
 </head>
 <body>
