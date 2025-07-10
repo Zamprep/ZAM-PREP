@@ -3,60 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In to Your Account - Zam Prep</title>
-    <meta name="description" content="Sign in to your Zam Prep account to access your study dashboard, AI tools, and more.">
-    <meta name="keywords" content="sign in, login, account, Zam Prep, access, study portal">
-    <meta name="author" content="Zam Prep Team">
-    <meta property="og:title" content="Sign In - Zam Prep">
-    <meta property="og:description" content="Sign in to your Zam Prep account to access your study dashboard, AI tools, and more.">
-    <meta property="og:image" content="https://www.yourwebsite.com/social-share-login.jpg"> <meta property="og:url" content="https://www.yourwebsite.com/en/sign-in.html"> <meta property="og:type" content="website">
-    <link rel="canonical" href="https://www.yourwebsite.com/en/sign-in.html"> <link rel="stylesheet" href="/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <title>Sign In - Zam Prep</title>
+    <link rel="stylesheet" href="/style.css">
     <style>
-        /* Basic styling for the main container to center Clerk's component */
-        .auth-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: calc(100vh - var(--header-height, 70px) - 60px); /* Adjust height to fill viewport minus header/footer */
-            padding: 20px;
-            box-sizing: border-box;
-            background-color: var(--light-gray-color); /* Match body background */
-        }
-        /* Styles for the loading spinner */
-        .loading-spinner { text-align: center; padding: 50px; font-size: 1.2em; color: #555; }
-        /* Simple header for auth pages if you don't want the full nav */
-        .auth-header {
-            background: var(--white-color);
-            box-shadow: 0 2px 4px var(--border-color);
-            padding: 10px 5%;
-            min-height: var(--header-height, 70px);
-            display: flex;
-            align-items: center;
-            justify-content: center; /* Center logo in auth header */
-        }
+        .auth-container { display: flex; justify-content: center; align-items: center; min-height: 80vh; }
+        .auth-header nav { justify-content: center; }
     </style>
 </head>
 <body>
 
     <header class="auth-header">
-        <a href="https://zamprep.com/en/"><img src="/logo.png" alt="Zam Prep Logo" class="logo"></a>
+        <nav>
+            <a href="/en/"><img src="/logo.png" alt="Zam Prep Logo" class="logo"></a>
+        </nav>
     </header>
 
-    <div id="loading-spinner" class="loading-spinner">
-        Loading sign-in form...
-    </div>
-
-    <div id="sign-in-container" class="auth-container" style="display: none;">
-        </div>
-
+    <main class="auth-container">
+        <div id="clerk-sign-in"></div>
+    </main>
+    
     <footer>
         <p>&copy; 2025 Zam Prep. All rights reserved.</p>
     </footer>
 
-    <script src="/script.js"></script>
-
-    </body>
+    <script async defer
+        src="https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+        data-clerk-publishable-key="pk_test_bW9yYWwtYm9hLTM4LmNsZXJrLmFjY291bnRzLmRldiQ"
+        onload="const clerk = new Clerk('pk_test_bW9yYWwtYm9hLTM4LmNsZXJrLmFjY291bnRzLmRldiQ'); clerk.load().then(() => { clerk.mountSignIn(document.getElementById('clerk-sign-in')); });"
+    ></script>
+</body>
 </html>

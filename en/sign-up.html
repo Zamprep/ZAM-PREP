@@ -6,26 +6,30 @@
     <title>Sign Up - Zam Prep</title>
     <link rel="stylesheet" href="/style.css">
     <style>
-        .auth-container { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 40px 20px; }
+        .auth-container { display: flex; justify-content: center; align-items: center; min-height: 80vh; }
         .auth-header nav { justify-content: center; }
-        .loading-spinner { text-align: center; padding: 50px; font-size: 1.2em; color: #555; }
     </style>
 </head>
 <body>
 
     <header class="auth-header">
-        <a href="/en/"><img src="/logo.png" alt="Zam Prep Logo" class="logo"></a>
+        <nav>
+            <a href="/en/"><img src="/logo.png" alt="Zam Prep Logo" class="logo"></a>
+        </nav>
     </header>
 
     <main class="auth-container">
-        <div id="loading-spinner" class="loading-spinner">Loading sign-up form...</div>
-        <div id="clerk-auth-form" style="display: none;"></div>
+        <div id="clerk-sign-up"></div>
     </main>
     
     <footer>
         <p>&copy; 2025 Zam Prep. All rights reserved.</p>
     </footer>
 
-    <script src="/script.js"></script>
+    <script async defer
+        src="https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+        data-clerk-publishable-key="pk_test_bW9yYWwtYm9hLTM4LmNsZXJrLmFjY291bnRzLmRldiQ"
+        onload="const clerk = new Clerk('pk_test_bW9yYWwtYm9hLTM4LmNsZXJrLmFjY291bnRzLmRldiQ'); clerk.load().then(() => { clerk.mountSignUp(document.getElementById('clerk-sign-up'), { afterSignUpUrl: '/en/onboarding.html' }); });"
+    ></script>
 </body>
 </html>
