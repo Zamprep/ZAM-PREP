@@ -1,8 +1,8 @@
 /* --- Global Styles & Variables --- */
 :root {
     --primary-color: #00BFA5;
-    --primary-color-dark: #00a28d; /* Added for consistent hover */
-    --secondary-color-dark: #4c4c4c; /* Added for consistent hover */
+    --primary-color-dark: #00a28d; /* Darker shade for hover states */
+    --secondary-color-dark: #4c4c4c; /* Darker shade for secondary button hover */
     --dark-color: #2B2B2B;
     --light-gray-color: #f4f4f4;
     --white-color: #ffffff;
@@ -10,14 +10,14 @@
     --border-color: rgba(0,0,0,0.1); /* For shadows and borders */
     --default-font: 'Poppins', sans-serif;
     --header-height: 70px; /* Define a consistent header height */
-    --section-padding-desktop: 80px 5%; /* More robust padding */
-    --section-padding-mobile: 40px 5%; /* More robust padding for smaller screens */
+    --section-padding-desktop: 80px 5%; /* Robust padding for large screens */
+    --section-padding-mobile: 40px 5%; /* Robust padding for smaller screens */
     --card-shadow: 0 4px 8px var(--border-color); /* Consistent card shadow */
 }
 
 html {
     scroll-behavior: smooth;
-    /* Optional: overflow-x: hidden; if horizontal scroll issues occur from elements */
+    overflow-x: hidden; /* Prevents horizontal scroll from accidental overflows */
 }
 
 body {
@@ -26,7 +26,7 @@ body {
     padding: 0;
     color: var(--dark-color);
     line-height: 1.6;
-    overflow-x: hidden; /* Prevents horizontal scroll from overflowing content */
+    overflow-x: hidden; /* Ensures no horizontal scroll */
 }
 
 /* --- Utility Classes (Optional but Recommended) --- */
@@ -43,9 +43,9 @@ header {
     padding: 10px 5%;
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 1000; /* Ensures header stays on top */
     min-height: var(--header-height); /* Ensures header maintains height */
-    display: flex; /* Use flex to align nav vertically if header has padding */
+    display: flex; /* Use flex to align nav vertically */
     align-items: center; /* Center nav vertically within header */
 }
 
@@ -56,12 +56,15 @@ nav {
     width: 100%; /* Ensures nav takes full width of header padding */
 }
 
-.logo-link { /* Added for potential link styling if img is wrapped */
-    display: flex; /* To vertically align logo */
+.logo-link { /* For the <a> tag wrapping your logo image */
+    display: flex;
     align-items: center;
 }
 
-.logo { height: 50px; display: block; /* Ensures no extra space below image */ }
+.logo {
+    height: 50px;
+    display: block; /* Removes extra space below image */
+}
 
 .nav-menu ul {
     list-style: none;
@@ -71,7 +74,9 @@ nav {
     padding: 0;
 }
 
-.nav-menu ul li { margin-left: 30px; }
+.nav-menu ul li {
+    margin-left: 30px;
+}
 
 .nav-menu ul li a {
     text-decoration: none;
@@ -79,10 +84,11 @@ nav {
     font-weight: 600;
     transition: color 0.3s ease;
     padding: 5px 0; /* Add padding for larger clickable area */
+    display: inline-block; /* Required for padding to work */
 }
 
 .nav-menu ul li a:hover,
-.nav-menu ul li a.active { /* Added active state styling */
+.nav-menu ul li a.active { /* Styling for active navigation link */
     color: var(--primary-color);
 }
 
@@ -95,38 +101,50 @@ nav {
     font-weight: 600;
     transition: background-color 0.3s ease;
     margin-left: 20px;
-    display: inline-block; /* Ensure padding works consistently */
+    display: inline-block; /* Ensures padding works consistently */
 }
 
-.cta-button:hover { background-color: var(--primary-color-dark); }
+.cta-button:hover {
+    background-color: var(--primary-color-dark);
+}
 
 .nav-menu {
     display: flex;
     align-items: center;
-    /* Removed specific width or flex-grow for desktop, managed by parent flex */
 }
 
 /* --- Mobile Navigation Toggle --- */
 .mobile-nav-toggle {
-    display: none; /* Hidden on desktop */
+    display: none; /* Hidden on desktop by default */
     background: none;
     border: none;
     font-size: 2rem;
     cursor: pointer;
-    color: var(--dark-color); /* Ensure visibility */
+    color: var(--dark-color); /* Ensures visibility against header background */
     padding: 5px 10px; /* Add padding for easier tapping */
-    /* Position for accessibility/visual consistency if needed */
+    z-index: 1001; /* Ensure it's above the header content if needed */
 }
 
-/* --- Hero Section etc. --- */
-.hero-section { /* Renamed from .hero to match HTML update */
+/* --- Hero Section & General Content Sections --- */
+.hero-section {
     background-color: var(--light-gray-color);
     text-align: center;
     padding: var(--section-padding-desktop);
 }
-.hero-content { max-width: 800px; margin: 0 auto; }
-.hero-content h1 { font-size: 3rem; font-weight: 700; margin-bottom: 20px; }
-.hero-content p { font-size: 1.2rem; margin-bottom: 30px; color: var(--text-muted-color); }
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.hero-content h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    color: var(--text-muted-color);
+}
 .cta-button-main {
     background-color: var(--primary-color);
     color: var(--white-color);
@@ -136,17 +154,26 @@ nav {
     font-size: 1.1rem;
     font-weight: 600;
     transition: background-color 0.3s ease;
-    display: inline-block; /* Ensure padding works consistently */
+    display: inline-block; /* Ensures padding works consistently */
 }
-.cta-button-main:hover { background-color: var(--primary-color-dark); }
+.cta-button-main:hover {
+    background-color: var(--primary-color-dark);
+}
 
 .exams, .features {
     padding: var(--section-padding-desktop);
     text-align: center;
 }
-.exams { background-color: var(--white-color); }
-.features { background-color: var(--light-gray-color); }
-.exams h2, .features h2 { font-size: 2.5rem; margin-bottom: 40px; }
+.exams {
+    background-color: var(--white-color);
+}
+.features {
+    background-color: var(--light-gray-color);
+}
+.exams h2, .features h2 {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+}
 
 .exams-grid, .features-grid {
     display: grid;
@@ -159,13 +186,19 @@ nav {
     background: var(--white-color);
     padding: 30px;
     border-radius: 8px;
-    box-shadow: var(--card-shadow); /* Using variable */
+    box-shadow: var(--card-shadow); /* Using variable for consistent shadow */
     text-align: left;
     display: flex;
     flex-direction: column;
 }
-.exam-card h3, .feature-card h3 { color: var(--primary-color); font-size: 1.5rem; margin-top: 0; }
-.exam-card p, .feature-card p { flex-grow: 1; } /* Ensures paragraphs take available space */
+.exam-card h3, .feature-card h3 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-top: 0;
+}
+.exam-card p, .feature-card p {
+    flex-grow: 1; /* Ensures paragraphs take available space, making card heights equal */
+}
 
 .exam-button {
     background-color: var(--dark-color);
@@ -179,9 +212,11 @@ nav {
     transition: background-color 0.3s ease;
     display: inline-block; /* Important for padding/sizing */
     width: fit-content; /* Adjusts button width to content */
-    align-self: center; /* Centers the button in flex column */
+    align-self: center; /* Centers the button in a flex column */
 }
-.exam-button:hover { background-color: var(--secondary-color-dark); }
+.exam-button:hover {
+    background-color: var(--secondary-color-dark);
+}
 
 /* Improved Coming Soon Card */
 .exam-card.coming-soon {
@@ -190,15 +225,15 @@ nav {
     align-items: center; /* Center content vertically in flex column */
     justify-content: center; /* Center content horizontally in flex column */
     text-align: center;
-    opacity: 0.7; /* Visually dim it */
+    opacity: 0.7; /* Visually dims the card */
     pointer-events: none; /* Disables all mouse events on the card */
-    cursor: default; /* Change cursor to default */
+    cursor: default; /* Changes cursor to default (not pointer) */
     position: relative; /* For the pseudo-element overlay */
 }
 
-/* Overlay for "Coming Soon!" text */
+/* Overlay for "Coming Soon!" text (note: text needs to be set per language in HTML style block if single style.css) */
 .exam-card.coming-soon::after {
-    content: "Coming Soon!"; /* Or "Em Breve!" for Portuguese */
+    content: "Coming Soon!"; /* If using a single CSS file for multiple languages, this text will be static. For dynamic text, define it in inline <style> per language HTML file. */
     position: absolute;
     top: 50%;
     left: 50%;
@@ -209,15 +244,15 @@ nav {
     border-radius: 5px;
     font-weight: bold;
     font-size: 1.1em;
-    white-space: nowrap; /* Prevent text from wrapping */
-    pointer-events: none; /* Ensure the overlay doesn't block underlying elements if you re-enable parent clicks */
+    white-space: nowrap; /* Prevents the text from wrapping */
+    pointer-events: none; /* Ensures the overlay doesn't block underlying elements if you re-enable parent clicks */
 }
 
 .exam-card.coming-soon .exam-button {
     display: none; /* Hide the button if the card is coming soon */
 }
 
-/* Footer */
+/* --- Footer --- */
 footer {
     background-color: var(--dark-color);
     color: var(--white-color);
@@ -251,24 +286,29 @@ footer {
     background-color: #e0e0e0; /* Lighter hover for light button */
 }
 .dropdown-content {
-    display: none; /* Controlled by JS data-visible or class */
+    display: none; /* Initially hidden, controlled by JS .show class */
     position: absolute;
-    background-color: var(--white-color); /* Use white for consistency */
+    background-color: var(--white-color); /* Consistent background */
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px var(--border-color); /* Use variable */
+    box-shadow: 0px 8px 16px 0px var(--border-color); /* Using variable for shadow */
     z-index: 1; /* Relative to parent .language-dropdown */
     border-radius: 5px;
     right: 0; /* Align to the right of the button */
     padding: 5px 0; /* Add slight internal padding */
 }
+.dropdown-content.show { /* Class toggled by JavaScript */
+    display: block;
+}
 .dropdown-content a {
-    color: var(--dark-color); /* Use dark color for text */
+    color: var(--dark-color); /* Consistent text color */
     padding: 12px 16px;
     text-decoration: none;
     display: block;
     transition: background-color 0.2s ease;
 }
-.dropdown-content a:hover { background-color: var(--light-gray-color); }
+.dropdown-content a:hover {
+    background-color: var(--light-gray-color);
+}
 
 /* --- Responsive Design --- */
 
@@ -278,8 +318,12 @@ footer {
         grid-template-columns: repeat(2, 1fr); /* 2 columns on tablets */
         gap: 25px;
     }
-    .hero-content h1 { font-size: 2.5rem; }
-    .hero-content p { font-size: 1.1rem; }
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    .hero-content p {
+        font-size: 1.1rem;
+    }
 }
 
 /* Mobile Devices */
@@ -287,11 +331,10 @@ footer {
     /* Header adjustments for mobile */
     header {
         padding: 10px 20px; /* More consistent padding for mobile */
-        min-height: auto; /* Allow header height to adjust */
+        min-height: auto; /* Allow header height to adjust dynamically */
     }
 
     .nav-menu {
-        /* Removed display: none; here, will be managed by data-visible="false" on load */
         position: absolute;
         top: var(--header-height); /* Position below header, using variable */
         left: 0;
@@ -302,13 +345,15 @@ footer {
         padding: 20px;
         box-shadow: 0 4px 8px var(--border-color);
         transition: transform 0.3s ease-in-out; /* Smooth transition for menu reveal */
-        transform: translateY(-100%); /* Start off-screen */
-        /* To make sure it's visually hidden if JS is slow, combine with HTML data-visible=false */
+        transform: translateY(-100%); /* Start off-screen (hidden) */
+        display: flex; /* Ensure it's a flex container for its children when visible */
+        /* Note: For initial state, HTML's data-visible="false" combined with transform: translateY(-100%); should hide it.
+           The 'display: flex' here ensures it behaves as a column layout when transform changes to 0. */
     }
 
+    /* JavaScript toggles data-visible="true" which brings the menu into view */
     .nav-menu[data-visible="true"] {
         transform: translateY(0); /* Slide in */
-        display: flex; /* Override initial display for flex column */
     }
     
     .nav-menu ul {
@@ -341,8 +386,12 @@ footer {
         padding: var(--section-padding-mobile); /* Use mobile specific padding */
     }
 
-    .hero-content h1 { font-size: 2.2rem; } /* Adjust font size for smaller screens */
-    .hero-content p { font-size: 1rem; }
+    .hero-content h1 {
+        font-size: 2.2rem;
+    } /* Adjust font size for smaller screens */
+    .hero-content p {
+        font-size: 1rem;
+    }
 
     .exams-grid, .features-grid {
         grid-template-columns: 1fr; /* Single column on mobile */
@@ -352,19 +401,24 @@ footer {
     .exam-card, .feature-card {
         padding: 20px; /* Slightly less padding on mobile cards */
     }
-    .exam-card h3, .feature-card h3 { font-size: 1.3rem; }
-    .exam-button { width: 100%; /* Full width button on mobile cards */ }
+    .exam-card h3, .feature-card h3 {
+        font-size: 1.3rem;
+    }
+    .exam-button {
+        width: 100%; /* Full width button on mobile cards for better tapping */
+    }
 
     .exam-card.coming-soon::after {
         font-size: 1em; /* Smaller text for mobile overlay */
         padding: 8px 12px;
     }
 
+    /* Mobile specific dropdown behavior */
     .dropdown-content {
         position: static; /* Stack dropdown content below button in mobile menu */
         width: 100%; /* Take full width */
         box-shadow: none; /* No shadow needed when static */
-        border-top: 1px solid var(--light-gray-color); /* Add a separator */
+        border-top: 1px solid var(--light-gray-color); /* Add a separator for clarity */
         border-radius: 0;
     }
     .language-button {
@@ -374,12 +428,21 @@ footer {
 
 /* Small Mobile Devices (e.g., iPhone SE) */
 @media (max-width: 480px) {
-    .hero-content h1 { font-size: 1.8rem; }
-    .hero-content p { font-size: 0.95rem; }
+    .hero-content h1 {
+        font-size: 1.8rem;
+    }
+    .hero-content p {
+        font-size: 0.95rem;
+    }
     .cta-button-main {
         padding: 12px 25px;
         font-size: 1rem;
     }
-    .exams h2, .features h2 { font-size: 2rem; margin-bottom: 30px; }
-    footer { font-size: 0.8em; }
+    .exams h2, .features h2 {
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+    footer {
+        font-size: 0.8em;
+    }
 }
