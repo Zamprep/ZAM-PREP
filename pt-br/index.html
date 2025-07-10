@@ -15,18 +15,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
     <style>
-        /* CSS para rolagem suave */
-        html { scroll-behavior: smooth; }
         /* Estilo básico para link de navegação ativo (ajuste em style.css para melhor controle) */
         .nav-menu ul li a.active { font-weight: bold; color: var(--primary-color, #007bff); }
-        /* Estilos para o cartão "Em Breve" overlay (do style.css) */
-        .exam-card.coming-soon { opacity: 0.7; pointer-events: none; cursor: default; position: relative; }
-        .exam-card.coming-soon::after {
-            content: "Em Breve!"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.7); color: white; padding: 10px 15px; border-radius: 5px;
-            font-weight: bold; font-size: 1.1em; white-space: nowrap; pointer-events: none;
-        }
-        .exam-card.coming-soon .exam-button { display: none; }
+        /* Estilos para o cartão "Em Breve" overlay (definido no style.css global) */
+        .exam-card.coming-soon::after { content: "Em Breve!"; }
     </style>
 </head>
 <body>
