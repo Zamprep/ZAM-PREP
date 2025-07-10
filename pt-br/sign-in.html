@@ -58,39 +58,5 @@
 
     <script src="/script.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', async function() {
-            const signInContainer = document.getElementById('sign-in-container');
-            const loadingSpinner = document.getElementById('loading-spinner');
-            const Clerk = window.Clerk;
-
-            if (!Clerk) {
-                console.error("Clerk.js não disponível.");
-                loadingSpinner.style.display = 'none'; // Hide spinner even on error
-                // Optionally display a fallback message or redirect
-                return;
-            }
-
-            try {
-                await Clerk.load(); // Load Clerk's user session
-                loadingSpinner.style.display = 'none'; // Hide loading spinner
-
-                // Check if user is already logged in
-                if (Clerk.user) {
-                    // Redirect to the main account dashboard if already logged in
-                    window.location.href = "https://zamprep.com/pt-br/account-dashboard.html";
-                } else {
-                    // Mount the Sign In component
-                    signInContainer.style.display = 'flex'; // Show the container
-                    Clerk.mountSignIn(signInContainer);
-                }
-            } catch (err) {
-                console.error("Erro ao carregar o Clerk para a página de login:", err);
-                loadingSpinner.style.display = 'none'; // Hide spinner on error
-                signInContainer.innerHTML = '<p style="color: red; text-align: center;">Não foi possível carregar o formulário de login. Por favor, tente novamente mais tarde.</p>';
-                signInContainer.style.display = 'flex';
-            }
-        });
-    </script>
-</body>
+    </body>
 </html>
