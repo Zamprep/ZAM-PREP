@@ -58,39 +58,5 @@
 
     <script src="/script.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', async function() {
-            const signUpContainer = document.getElementById('sign-up-container');
-            const loadingSpinner = document.getElementById('loading-spinner');
-            const Clerk = window.Clerk;
-
-            if (!Clerk) {
-                console.error("Clerk.js não disponível.");
-                loadingSpinner.style.display = 'none'; // Hide spinner even on error
-                return;
-            }
-
-            try {
-                await Clerk.load(); // Load Clerk's user session
-                loadingSpinner.style.display = 'none'; // Hide loading spinner
-
-                // Check if user is already logged in
-                if (Clerk.user) {
-                    // If already logged in, redirect to onboarding if needed, otherwise to dashboard
-                    // You might want to check Clerk.user.publicMetadata.onboarding_complete here
-                    window.location.href = "https://zamprep.com/pt-br/onboarding.html"; // Or directly to dashboard
-                } else {
-                    // Mount the Sign Up component
-                    signUpContainer.style.display = 'flex'; // Show the container
-                    Clerk.mountSignUp(signUpContainer);
-                }
-            } catch (err) {
-                console.error("Erro ao carregar o Clerk para a página de cadastro:", err);
-                loadingSpinner.style.display = 'none'; // Hide spinner on error
-                signUpContainer.innerHTML = '<p style="color: red; text-align: center;">Não foi possível carregar o formulário de cadastro. Por favor, tente novamente mais tarde.</p>';
-                signUpContainer.style.display = 'flex';
-            }
-        });
-    </script>
-</body>
+    </body>
 </html>
