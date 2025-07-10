@@ -3,52 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - Zam Prep</title>
-    <link rel="stylesheet" href="/style.css">
+    <title>Create Your Account - Zam Prep</title>
+    <meta name="description" content="Create your free Zam Prep account to start revolutionizing your exam preparation with AI.">
+    <meta name="keywords" content="create account, register, sign up, Zam Prep, free registration">
+    <meta name="author" content="Zam Prep Team">
+    <meta property="og:title" content="Create Account - Zam Prep">
+    <meta property="og:description" content="Create your free Zam Prep account to start revolutionizing your exam preparation with AI.">
+    <meta property="og:image" content="https://www.yourwebsite.com/social-share-signup.jpg"> <meta property="og:url" content="https://www.yourwebsite.com/en/sign-up.html"> <meta property="og:type" content="website">
+    <link rel="canonical" href="https://www.yourwebsite.com/en/sign-up.html"> <link rel="stylesheet" href="/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
     <style>
-        .auth-container { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 40px 20px; }
+        /* Basic styling for the main container to center Clerk's component */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - var(--header-height, 70px) - 60px); /* Adjust height to fill viewport minus header/footer */
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: var(--light-gray-color); /* Match body background */
+        }
+        /* Styles for the loading spinner */
+        .loading-spinner { text-align: center; padding: 50px; font-size: 1.2em; color: #555; }
+        /* Simple header for auth pages if you don't want the full nav */
+        .auth-header {
+            background: var(--white-color);
+            box-shadow: 0 2px 4px var(--border-color);
+            padding: 10px 5%;
+            min-height: var(--header-height, 70px);
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center logo in auth header */
+        }
     </style>
-
-    <script async defer
-        src="https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
-        data-clerk-publishable-key="pk_test_bW9yYWwtYm9hLTM4LmNsZXJrLmFjY291bnRzLmRldiQ"
-        onload="startClerk()"
-    ></script>
-
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="/en/"><img src="/logo.png" alt="Zam Prep Logo" class="logo"></a>
-        </nav>
+
+    <header class="auth-header">
+        <a href="https://zamprep.com/en/"><img src="/logo.png" alt="Zam Prep Logo" class="logo"></a>
     </header>
 
-    <main class="auth-container">
-        <div id="clerk-component"></div>
-    </main>
-    
+    <div id="loading-spinner" class="loading-spinner">
+        Loading sign-up form...
+    </div>
+
+    <div id="sign-up-container" class="auth-container" style="display: none;">
+        </div>
+
     <footer>
         <p>&copy; 2025 Zam Prep. All rights reserved.</p>
     </footer>
 
+    <script src="/script.js"></script>
+
     <script>
-        function startClerk() {
-            const clerkComponent = document.getElementById('clerk-component');
+        document.addEventListener('DOMContentLoaded', async function() {
+            const signUpContainer = document.getElementById('sign-up-container');
+            const loadingSpinner = document.getElementById('loading-spinner');
             const Clerk = window.Clerk;
-            
-            if (clerkComponent && Clerk) {
-                try {
-                    Clerk.load().then(() => {
-                        Clerk.mountSignUp(clerkComponent, {
-                            // THIS IS THE UPDATED LINE
-                            redirectUrl: '/en/' // After sign-up, redirect to the English homepage
-                        });
-                    });
-                } catch (error) {
-                    console.error(error);
-                }
+
+            if (!Clerk) {
+                console.error("Clerk.js not available.");
+                loadingSpinner.style.display = 'none'; // Hide spinner even on error
+                return;
             }
-        }
+
+            try {
+                await Clerk.load(); // Load Clerk's user session
+                loadingSpinner.style.display = 'none'; // Hide loading spinner
+
+                // Check if user is already logged in
+                if (Clerk.user) {
+                    // If already logged in, redirect to onboarding if needed, otherwise to dashboard
+                    // You might want to check Clerk.user.publicMetadata.onboarding_complete here
+                    window.location.href = "https://zamprep.com/en/onboarding.html"; // Or directly to dashboard
+                } else {
+                    // Mount the Sign Up component
+                    signUpContainer.style.display = 'flex'; // Show the container
+                    Clerk.mountSignUp(signUpContainer);
+                }
+            } catch (err) {
+                console.error("Error loading Clerk for sign-up page:", err);
+                loadingSpinner.style.display = 'none'; // Hide spinner on error
+                signUpContainer.innerHTML = '<p style="color: red; text-align: center;">Could not load the sign-up form. Please try again later.</p>';
+                signUpContainer.style.display = 'flex';
+            }
+        });
     </script>
 </body>
 </html>
