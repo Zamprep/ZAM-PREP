@@ -6,53 +6,20 @@
     <title>Sua Conta - Zam Prep</title>
     <link rel="stylesheet" href="/style.css">
     <style>
-        /* Estilos reutilizados para elementos do painel */
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            background-color: var(--light-gray-color); /* Assumindo que esta variável está definida em style.css */
-        }
-        .dashboard-header h1 {
-            margin: 0;
-            font-size: 1.5rem;
-        }
-        .portal-selection {
-            padding: 40px 20px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-        .portal-selection h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 40px;
-        }
-
+        /* Estilos para elementos do painel */
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; background-color: var(--light-gray-color); }
+        .dashboard-header h1 { margin: 0; font-size: 1.5rem; }
+        .portal-selection { padding: 40px 20px; max-width: 1100px; margin: 0 auto; }
+        .portal-selection h2 { text-align: center; font-size: 2.5rem; margin-bottom: 40px;}
         /* Estilos para o indicador de carregamento */
-        .loading-spinner {
-            text-align: center;
-            padding: 50px;
-            font-size: 1.2em;
-            color: #555;
-        }
+        .loading-spinner { text-align: center; padding: 50px; font-size: 1.2em; color: #555; }
         /* Estilos para o botão "Em Breve" */
-        .exam-button.coming-soon {
-            background-color: #aaa !important; /* Use !important para sobrescrever .exam-button, se necessário */
-            cursor: not-allowed;
-            opacity: 0.7; /* Diminui ligeiramente para indicar que está inativo */
-        }
+        .exam-button.coming-soon { background-color: #aaa !important; cursor: not-allowed; opacity: 0.7; }
     </style>
 
-    <script async defer
-        src="https://moral-boa-38.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
-        data-clerk-publishable-key="pk_test_bW9yYWwtYm9hLTM4LmNsZXJrLmFjY291bnRzLmRldiQ"
-        onload="startClerk()"
-    ></script>
-
-</head>
+    </head>
 <body>
-
+    
     <div id="loading-spinner" class="loading-spinner">
         Carregando sua conta...
     </div>
@@ -80,50 +47,54 @@
                         <a href="#" class="exam-button coming-soon">Em Breve</a>
                     </div>
                 </div>
-            </div>
-        </main>
-
+            </main>
+            
         <footer>
             <p>&copy; 2025 Zam Prep. Todos os direitos reservados.</p>
         </footer>
     </div>
 
+    <script src="/script.js"></script>
+
     <script>
-        function startClerk() {
+        // Esta função inicializará o Clerk para esta página de painel específica
+        async function initDashboardClerk() {
             const contentWrapper = document.querySelector('.content-wrapper');
             const userButton = document.getElementById('user-button');
             const loadingSpinner = document.getElementById('loading-spinner');
-            const Clerk = window.Clerk;
+            const Clerk = window.Clerk; // Acessa o objeto global Clerk carregado por script.js
 
-            // Oculta o indicador de carregamento assim que Clerk tiver carregado os dados
-            // independentemente do status de autenticação
-            loadingSpinner.style.display = 'none';
+            // Verifica se o Clerk está disponível antes de prosseguir
+            if (!Clerk) {
+                console.error("Clerk.js não disponível. Certifique-se de que script.js o carrega.");
+                // Fallback: Redireciona para o login se o Clerk não estiver carregado
+                window.location.href = "/pt-br/sign-in.html";
+                return;
+            }
 
-            Clerk.load().then(() => {
+            try {
+                await Clerk.load(); // Carrega a sessão do usuário
+
+                loadingSpinner.style.display = 'none'; // Oculta o indicador de carregamento
+
                 if (Clerk.user) {
-                    // Se um usuário estiver logado
-                    contentWrapper.style.display = 'block'; // Exibe o conteúdo principal
+                    contentWrapper.style.display = 'block'; // Exibe o conteúdo
                     Clerk.mountUserButton(userButton); // Monta o botão do usuário
                 } else {
-                    // Se nenhum usuário estiver logado, redireciona para a página de login
-                    window.location.href = "/pt-br/sign-in.html";
+                    window.location.href = "/pt-br/sign-in.html"; // Redireciona se não estiver logado
                 }
-            }).catch(err => {
-                // Tratamento de erro básico para Clerk.load()
-                console.error("Clerk.load() falhou:", err);
-                // Opcionalmente, exiba uma mensagem de erro ou redirecione para uma página de erro geral
-                // Por enquanto, redirecionaremos para o login em caso de erro também, por simplicidade
-                window.location.href = "/pt-br/sign-in.html";
-            });
+            } catch (err) {
+                console.error("Erro de inicialização do painel do Clerk:", err);
+                window.location.href = "/pt-br/sign-in.html"; // Redireciona em caso de erro
+            }
         }
 
-        // Oculta inicialmente o content-wrapper e mostra o loading-spinner
-        // Isso garante que o spinner seja visível imediatamente se o JS rodar antes de Clerk.load()
+        // Inicialmente oculta o conteúdo e mostra o indicador de carregamento, então chama initDashboardClerk
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('.content-wrapper').style.display = 'none';
             document.getElementById('loading-spinner').style.display = 'block';
-            // Garante também que o user-button não seja visível antes de Clerk montá-lo.
-            document.getElementById('user-button').style.display = 'none';
+            document.getElementById('user-button').style.display = 'none'; // Mantém o botão do usuário oculto até ser montado
+            initDashboardClerk(); // Inicia a inicialização do Clerk específica do painel
         });
     </script>
 </body>
