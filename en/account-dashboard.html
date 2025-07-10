@@ -6,11 +6,42 @@
     <title>Your Account - Zam Prep</title>
     <link rel="stylesheet" href="/style.css">
     <style>
-        .dashboard-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; background-color: var(--light-gray-color); }
-        .dashboard-header h1 { margin: 0; font-size: 1.5rem; }
-        .portal-selection { padding: 40px 20px; max-width: 1100px; margin: 0 auto; }
-        .portal-selection h2 { text-align: center; font-size: 2.5rem; margin-bottom: 40px;}
-        /* We can reuse the exam-grid styles from the homepage */
+        /* Reused styles for dashboard elements */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: var(--light-gray-color); /* Assuming this variable is defined in style.css */
+        }
+        .dashboard-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .portal-selection {
+            padding: 40px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .portal-selection h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+        }
+
+        /* Styles for the loading spinner */
+        .loading-spinner {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2em;
+            color: #555;
+        }
+        /* Styles for the "Coming Soon" button */
+        .exam-button.coming-soon {
+            background-color: #aaa !important; /* Use !important to override .exam-button if necessary */
+            cursor: not-allowed;
+            opacity: 0.7; /* Slightly dim it to indicate it's inactive */
+        }
     </style>
 
     <script async defer
@@ -21,7 +52,11 @@
 
 </head>
 <body>
-    
+
+    <div id="loading-spinner" class="loading-spinner">
+        Loading your account...
+    </div>
+
     <div class="content-wrapper" style="display: none;">
         <header>
             <nav>
@@ -42,12 +77,12 @@
                     <div class="exam-card">
                         <h3>IELTS</h3>
                         <p>Prepare for the IELTS exam with our dedicated tools. (Coming Soon)</p>
-                        <a href="#" class="exam-button" style="background-color: #aaa; cursor: not-allowed;">Coming Soon</a>
+                        <a href="#" class="exam-button coming-soon">Coming Soon</a>
                     </div>
                 </div>
             </div>
         </main>
-        
+
         <footer>
             <p>&copy; 2025 Zam Prep. All rights reserved.</p>
         </footer>
@@ -57,17 +92,40 @@
         function startClerk() {
             const contentWrapper = document.querySelector('.content-wrapper');
             const userButton = document.getElementById('user-button');
+            const loadingSpinner = document.getElementById('loading-spinner');
             const Clerk = window.Clerk;
+
+            // Hide the loading spinner once Clerk has loaded data,
+            // regardless of authentication status
+            loadingSpinner.style.display = 'none';
 
             Clerk.load().then(() => {
                 if (Clerk.user) {
-                    contentWrapper.style.display = 'block';
-                    Clerk.mountUserButton(userButton);
+                    // If a user is logged in
+                    contentWrapper.style.display = 'block'; // Show the main content
+                    Clerk.mountUserButton(userButton); // Mount the user button
                 } else {
-                    window.location.href = "/en/sign-in.html"; 
+                    // If no user is logged in, redirect to sign-in page
+                    window.location.href = "/en/sign-in.html";
                 }
+            }).catch(err => {
+                // Basic error handling for Clerk.load()
+                console.error("Clerk.load() failed:", err);
+                // Optionally display an error message or redirect to a general error page
+                // For now, we'll just redirect to sign-in on error as well for simplicity
+                window.location.href = "/en/sign-in.html";
             });
         }
+
+        // Initially hide the content wrapper and show the loading spinner
+        // This ensures the spinner is visible immediately if JS runs before Clerk.load()
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.content-wrapper').style.display = 'none';
+            document.getElementById('loading-spinner').style.display = 'block';
+            // Also ensure user-button is not visible before Clerk mounts it,
+            // especially if it's placed in a way that might show it empty.
+            document.getElementById('user-button').style.display = 'none';
+        });
     </script>
 </body>
 </html>
