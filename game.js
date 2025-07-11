@@ -15,8 +15,8 @@ class MainMenuScene extends Phaser.Scene {
             .setInteractive();
 
         // Add hover effect for the button
-        startButton.on('pointerover', () => startButton.setStyle({ fill: '#00BFA5' }));
-        startButton.on('pointerout', () => startButton.setStyle({ fill: '#fff' }));
+        startButton.on('pointerover', () => startButton.setStyle({ fill: '#007A68' })); // Use new accessible color
+        startButton.on('pointerout', () => startButton.setStyle({ fill: '#fff' })); // Revert on mouse out
         startButton.on('pointerdown', () => {
             this.scene.start('GameScene'); // Start the main game scene
         });
@@ -413,8 +413,8 @@ class GameOverScene extends Phaser.Scene {
             .setInteractive();
 
         // Add hover effect
-        playAgainButton.on('pointerover', () => playAgainButton.setStyle({ fill: '#00BFA5' }));
-        playAgainButton.on('pointerout', () => playAgainButton.setStyle({ fill: '#fff' }));
+        playAgainButton.on('pointerover', () => playAgainButton.setStyle({ fill: '#007A68' })); // Use new accessible color
+        playAgainButton.on('pointerout', () => playAgainButton.setStyle({ fill: '#fff' })); // Revert on mouse out
         playAgainButton.on('pointerdown', () => this.scene.start('MainMenuScene'));
     }
 }
