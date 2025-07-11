@@ -1,7 +1,9 @@
 /* --- Global Styles & Variables --- */
 :root {
-    --primary-color: #00BFA5;
-    --primary-color-dark: #00a28d; /* Darker shade for hover states */
+    /* WCAG AA compliant green for better accessibility on white backgrounds.
+       The original #00BFA5 had insufficient contrast against white text. */
+    --primary-color: #007A68;
+    --primary-color-dark: #006A5B; /* Darker shade for hover states */
     --secondary-color-dark: #4c4c4c; /* Darker shade for secondary button hover */
     --dark-color: #2B2B2B;
     --light-gray-color: #f4f4f4;
@@ -25,6 +27,48 @@ body {
     padding: 0;
     color: var(--dark-color);
     line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* --- Button System (Refactored) --- */
+/*
+  Base button style. Apply this class to all buttons/links that act as buttons.
+  Example HTML: <a href="#" class="btn btn--primary">Click Me</a>
+*/
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px); /* Subtle lift effect on hover */
+}
+
+/* Modifier for primary action buttons (e.g., header CTA, hero CTA) */
+.btn--primary {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+}
+.btn--primary:hover { background-color: var(--primary-color-dark); }
+
+/* Modifier for secondary action buttons (e.g., exam cards) */
+.btn--secondary {
+    background-color: var(--dark-color);
+    color: var(--white-color);
+}
+.btn--secondary:hover { background-color: var(--secondary-color-dark); }
+
+/* Modifier for larger buttons (e.g., hero CTA) */
+.btn--large {
+    padding: 15px 30px;
+    font-size: 1.1rem;
 }
 
 /* --- Header & Navigation --- */
@@ -73,21 +117,6 @@ nav {
 
 .nav-menu ul li a:hover {
     color: var(--primary-color);
-}
-
-.cta-button {
-    background-color: var(--primary-color);
-    color: var(--white-color);
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-    margin-left: 20px;
-}
-
-.cta-button:hover {
-    background-color: var(--primary-color-dark);
 }
 
 .nav-menu {
@@ -139,21 +168,6 @@ nav {
 
 .exams h2, .features h2 { font-size: 2.5rem; margin-bottom: 40px; }
 
-.cta-button-main {
-    background-color: var(--primary-color);
-    color: var(--white-color);
-    padding: 15px 30px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-    border: none;
-    cursor: pointer;
-}
-.cta-button-main:hover { background-color: var(--primary-color-dark); }
-
-
 .exams-grid, .features-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -170,19 +184,6 @@ nav {
 }
 .exam-card h3, .feature-card h3 { color: var(--primary-color); font-size: 1.5rem; margin-top: 0; }
 .exam-card p, .feature-card p { flex-grow: 1; }
-
-.exam-button {
-    background-color: var(--dark-color);
-    color: var(--white-color);
-    padding: 12px 20px;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: 600;
-    margin-top: 20px;
-    transition: background-color 0.3s ease;
-}
-.exam-button:hover { background-color: var(--secondary-color-dark); }
 
 .exam-card.coming-soon {
     background-color: var(--light-gray-color);
@@ -217,15 +218,15 @@ footer {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
+    background-color: var(--white-color);
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px var(--border-color);
     z-index: 1;
     border-radius: 5px;
     right: 0;
 }
-.dropdown-content a { color: black; padding: 12px 16px; text-decoration: none; display: block; }
-.dropdown-content a:hover { background-color: #f1f1f1; }
+.dropdown-content a { color: var(--dark-color); padding: 12px 16px; text-decoration: none; display: block; }
+.dropdown-content a:hover { background-color: var(--light-gray-color); }
 .show { display: block; }
 
 
@@ -256,20 +257,20 @@ footer {
         margin-top: 15px;
     }
 
-    /* Reset desktop margin and center the button text */
-    .nav-menu .cta-button {
-        margin-left: 0;
-        text-align: center;
-    }
-
     #auth-links .nav-link {
         text-align: center;
     }
 
     #user-button, .language-dropdown {
-        margin: 15px 0 0 0;
-        align-self: center; /* Center these items in the flex column */
+        margin: 15px 0 0;
+        width: 100%; /* Ensure these elements stretch to full width */
     }
+
+    .language-dropdown .language-button {
+        width: 100%;
+        box-sizing: border-box; /* Ensure padding is included in the width */
+    }
+
     .mobile-nav-toggle { display: block; }
 
     .hero, .features, .exams { padding: var(--section-padding-mobile); }
@@ -325,4 +326,25 @@ footer {
     font-size: 1.8rem;
     margin-top: 0;
     text-align: center;
+}
+
+/* --- Dark Mode Theme --- */
+body[data-theme="dark"] {
+    --dark-color: #e0e0e0; /* Was text, now light text */
+    --white-color: #2B2B2B; /* Was background, now dark background */
+    --light-gray-color: #3a3a3a; /* Was light section bg, now dark section bg */
+    --text-muted-color: #a0a0a0; /* Lighter muted text */
+    --border-color: rgba(255, 255, 255, 0.1); /* Lighter border/shadow color */
+}
+
+/*
+  The logo might need an inverted version for dark mode.
+  This rule swaps the logo source if you have a `logo-dark.svg`.
+*/
+body[data-theme="dark"] .logo {
+    /* If your logo is an SVG with `fill="currentColor"`, it might adapt automatically.
+       Otherwise, you can use this rule to swap it to a dark-mode version,
+       or use a filter as a quick fix. */
+    /* content: url('/path/to/your/logo-dark.svg'); */
+    filter: invert(1) hue-rotate(180deg);
 }
