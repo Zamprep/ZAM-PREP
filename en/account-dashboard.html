@@ -54,43 +54,39 @@
         </footer>
     </div>
 
-    <script src="/script.js"></script>
+    <script async defer
+        src="https://distinct-ant-32.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+        data-clerk-publishable-key="pk_test_ZGlzdGluY3QtYW50LTMyLmNsZXJrLmFjY291bnRzLmRldiQ"
+        onload="initDashboardClerk()"
+    ></script>
 
     <script>
+        const clerkPublishableKey = "pk_test_ZGlzdGluY3QtYW50LTMyLmNsZXJrLmFjY291bnRzLmRldiQ";
+
         async function initDashboardClerk() {
             const contentWrapper = document.querySelector('.content-wrapper');
             const userButton = document.getElementById('user-button');
             const loadingSpinner = document.getElementById('loading-spinner');
-            const Clerk = window.Clerk; // Access the global Clerk object loaded by script.js
-
-            if (!Clerk) {
-                console.error("Clerk.js not available. Redirecting.");
-                window.location.href = "/en/sign-in.html";
-                return;
-            }
+            
+            const clerk = new window.Clerk(clerkPublishableKey);
 
             try {
-                await Clerk.load(); // Load the user's session
-                loadingSpinner.style.display = 'none'; // Hide loading spinner
+                await clerk.load();
 
-                if (Clerk.user) {
-                    contentWrapper.style.display = 'block'; // Show content
-                    Clerk.mountUserButton(userButton); // Mount the user button
+                if (clerk.user) {
+                    clerk.mountUserButton(userButton, { afterSignOutUrl: '/en/' });
+                    contentWrapper.style.display = 'block';
+                    loadingSpinner.style.display = 'none';
                 } else {
-                    window.location.href = "/en/sign-in.html"; // Redirect if not logged in
+                    // User is not signed in, redirect to sign-in page.
+                    window.location.href = "/en/sign-in.html";
                 }
             } catch (err) {
                 console.error("Clerk dashboard initialization error:", err);
-                window.location.href = "/en/sign-in.html"; // Redirect on error
+                // On error, also redirect to sign-in page.
+                window.location.href = "/en/sign-in.html";
             }
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelector('.content-wrapper').style.display = 'none';
-            document.getElementById('loading-spinner').style.display = 'block';
-            document.getElementById('user-button').style.display = 'none'; // Keep user button hidden until mounted
-            initDashboardClerk(); // Start the dashboard-specific Clerk initialization
-        });
     </script>
 </body>
 </html>

@@ -95,6 +95,21 @@ nav {
     align-items: center;
 }
 
+/* --- Authentication Elements --- */
+/* Container for Login/Sign Up links */
+#auth-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: 20px;
+}
+
+/* Clerk's user button. Hidden by default, shown via JS. */
+#user-button {
+    display: none;
+    margin-left: 20px;
+}
+
 /* --- Mobile Navigation Toggle --- */
 .mobile-nav-toggle {
     display: none;
@@ -230,9 +245,31 @@ footer {
     }
     .nav-menu[data-visible="true"] { display: flex; }
     .nav-menu ul { flex-direction: column; width: 100%; }
-    .nav-menu ul li { margin: 10px 0; text-align: center; }
-    .cta-button { margin: 10px 0; text-align: center; }
-    .language-dropdown { margin: 10px 0; }
+    .nav-menu ul li { margin: 15px 0; text-align: center; }
+
+    /* Stack auth links vertically in mobile nav */
+    #auth-links {
+        flex-direction: column;
+        align-items: stretch; /* Make children take full width */
+        gap: 10px;
+        margin-left: 0;
+        margin-top: 15px;
+    }
+
+    /* Reset desktop margin and center the button text */
+    .nav-menu .cta-button {
+        margin-left: 0;
+        text-align: center;
+    }
+
+    #auth-links .nav-link {
+        text-align: center;
+    }
+
+    #user-button, .language-dropdown {
+        margin: 15px 0 0 0;
+        align-self: center; /* Center these items in the flex column */
+    }
     .mobile-nav-toggle { display: block; }
 
     .hero, .features, .exams { padding: var(--section-padding-mobile); }
@@ -250,6 +287,22 @@ footer {
     align-items: center;
     min-height: 80vh;
     padding: 40px 20px;
+    background-color: var(--light-gray-color); /* Add a background for visual context */
+}
+
+/* --- Clerk Auth Form Customization --- */
+/*
+  Create a wrapper div around your Clerk components in your HTML/JSX
+  to control their size and alignment within the .auth-container.
+  e.g., <div class="clerk-form-wrapper"><SignIn /></div>
+*/
+.clerk-form-wrapper {
+    width: 100%;
+    max-width: 420px; /* Adjust to a width that suits the form */
+    background: var(--white-color);
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
 }
 .loading-spinner {
     text-align: center;

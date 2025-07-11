@@ -37,9 +37,12 @@
                     <li><a href="/en/" class="nav-link active" data-section="hero">Home</a></li>
                     <li><a href="/en/#exams" class="nav-link" data-section="exams">Exams</a></li>
                     <li><a href="/en/#features" class="nav-link" data-section="features">Features</a></li>
-                    <li><a href="/en/sign-in.html" class="nav-link">Login</a></li>
                 </ul>
-                <a href="/en/sign-up.html" class="cta-button">Sign Up</a>
+                <div id="auth-links">
+                    <a href="/en/sign-in.html" class="nav-link">Login</a>
+                    <a href="/en/sign-up.html" class="cta-button">Sign Up</a>
+                </div>
+                <div id="user-button"></div>
                 <div class="language-dropdown">
                     <button class="language-button" aria-expanded="false" aria-haspopup="true">English</button>
                     <div class="dropdown-content" role="menu">
@@ -104,5 +107,6 @@
     </footer>
 
     <script src="/script.js"></script>
+    <script src="/clerk-handler.js"></script>
 </body>
 </html>
